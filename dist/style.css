@@ -3,7 +3,7 @@
 :root {
   --color1: #000000;
   --color2: #8a817c;
-  --color3: #bcb8b1;
+  --color3: #cfccc6;
   --color4: #ffffff;
   --color5: #e0afa0;
   font-family: 'Noto Sans', sans-serif;
@@ -105,10 +105,47 @@ span {
 }
 
 #add-todo-container {
-  padding: 1rem 0.5rem;
+  padding: 0 0.5rem;
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  margin: 1rem 0;
+  border-radius: 10px;
+  transition: 0.2s;
+}
+
+#add-todo-container:hover {
+  background-color: var(--color3);
+  cursor: pointer;
+}
+
+#add-todo-form {
+  border: 1px var(--color3) solid;
+  display: grid;
+  grid-template-columns: 1fr 4fr;
+  padding: 1rem;
+  gap: 0.5rem;
+  border-radius: 10px;
+}
+
+input,
+select {
+  border: none;
+  padding: 0.4rem;
+}
+
+label {
+  color: var(--color2);
+  font-size: 0.9rem;
+  padding: 0.4rem;
+}
+
+#todo-title-input {
+  font-size: 1.2rem;
+}
+
+#todo-description-input {
+  font-size: 1rem;
 }
 
 #add-projects-container {
@@ -121,4 +158,49 @@ span {
 div#add-projects-container span {
   color: var(--color4);
   font-size: clamp(0.8rem, 1.3vw, 1.1rem);
+}
+
+#add-todo-flex-container {
+  display: flex;
+  justify-content: space-between;
+  grid-column: 1/3;
+}
+
+div#add-todo-flex-container div {
+  display: flex;
+  gap: 1rem;
+}
+
+.flex {
+  display: flex;
+  justify-content: space-between;
+}
+
+#button-wrapper {
+  gap: 1rem;
+}
+
+div#button-wrapper button {
+  padding: 0.5rem;
+  transition: 0.2s;
+}
+
+div#button-wrapper button:hover,
+div#button-wrapper button:focus {
+  background-color: var(--color1);
+  color: var(--color4);
+}
+
+@media (max-width: 700px) {
+  #side-bar {
+    display: none;
+  }
+
+  #todos {
+    width: 90%;
+  }
+
+  body {
+    grid-template-columns: 1fr;
+  }
 }
