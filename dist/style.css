@@ -213,3 +213,7 @@ div#button-wrapper button:focus {
     grid-template-columns: 1fr;
   }
 }
+
+#todo-list {
+  color: var(--color1);
+}
