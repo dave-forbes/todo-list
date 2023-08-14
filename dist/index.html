@@ -16,17 +16,17 @@
   <div class="side-bar">
     <h1 class="side-bar-title">Todo List</h1>
     <ul class="todo-nav">
-      <div class="nav-item">
-        <i class="fa-solid fa-inbox"></i>
-        <li>Inbox</li>
+      <div data-index="Inbox" id="inbox" class="nav-item">
+        <i data-index="Inbox" class="fa-solid fa-inbox"></i>
+        <li data-index="Inbox">Inbox</li>
       </div>
-      <div class="nav-item">
-        <i class="fa-solid fa-calendar-day"></i>
-        <li>Today</li>
+      <div data-index="Today" id="today" class="nav-item">
+        <i data-index="Today" class="fa-solid fa-calendar-day"></i>
+        <li data-index="Today">Today</li>
       </div>
-      <div class="nav-item">
-        <i class="fa-solid fa-calendar-week"></i>
-        <li>Upcoming</li>
+      <div data-index="Upcoming" id="upcoming" class="nav-item">
+        <i data-index="Upcoming" class="fa-solid fa-calendar-week"></i>
+        <li data-index="Upcoming">Upcoming</li>
       </div>
     </ul>
     <h2 class="projects-title">Projects</h2>
@@ -39,7 +39,7 @@
   </div>
   <div class="main">
     <div class="todos">
-      <h3>Today <span class="date"></span></h3>
+      <h3 class="todo-list-type">Today<span class="date"></span></h3>
       <div class="todo-list"></div>
       <div class="add-todo-container">
         <button class="add-todo-form-button">+</button>
