@@ -33,11 +33,11 @@
   <div id="main">
     <div id="todos">
       <h3>Today <span id="date"></span></h3>
-      <div id="add-todo-container">
-        <button id="add-todo-button">+</button>
+      <div id="add-todo-container" style="display: flex;">
+        <button id="add-todo-form-button">+</button>
         <span>Add todo</span>
       </div>
-      <div id="add-todo-form">
+      <div id="add-todo-form" style="display: none;">
         <label>Title</label>
         <input id="todo-title-input" type="text">
         <label>Description</label>
@@ -45,10 +45,10 @@
         <label for="todo-due-date-input">Due Date</label>
         <input type="date" name="date" id="todo-due-date-input">
         <label>Priority</label>
-        <select>
-          <option>Low</option>
-          <option>Medium</option>
-          <option>High</option>
+        <select id="todo-priority-input">
+          <option value="low">Low</option>
+          <option value="medium">Medium</option>
+          <option value="high">High</option>
         </select>
         <label>Project</label>
         <div class="flex">
@@ -57,7 +57,7 @@
             <option>Project 1</option>
           </select>
           <div id="button-wrapper" class="flex">
-            <button>Add Todo</button>
+            <button id="add-todo-button">Add Todo</button>
             <button id="cancel-form">Cancel</button>
           </div>
         </div>
