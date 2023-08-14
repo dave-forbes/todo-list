@@ -68,6 +68,7 @@ function displayTodo(todo) {
   container.appendChild(todoTitle);
   container.appendChild(todoDescription);
   container.appendChild(todoPriority);
+  container.classList.add('todo');
   todoList.appendChild(container);
 }
 
