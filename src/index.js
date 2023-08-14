@@ -1,7 +1,7 @@
 import dateFormat, { masks } from "dateformat";
 const now = new Date();
 const span = document.querySelector('#date');
-const todoList = [];
+const todoListArray = [];
 
 span.textContent = dateFormat(now, "dddd mmmm dS");
 
@@ -30,9 +30,9 @@ const CreateTodo = function (title, description, dueDate, priority) {
 
 addTodoButton.addEventListener('click', () => {
   const newTodo = CreateTodo(todoTitleInput.value, todoDescriptionInput.value, todoDueDateInput.value, todoPriorityInput.value);
-  todoList.push(newTodo);
-  console.log(todoList);
+  todoListArray.push(newTodo);
   toggleForm();
+  displayTodo(newTodo);
 });
 
 function toggleForm() {
@@ -56,4 +56,26 @@ function clearForm() {
   todoPriorityInput.value = '';
 }
 
+function displayTodo(todo) {
+  const todoList = document.querySelector('#todo-list');
+  const container = document.createElement('div');
+  const todoTitle = document.createElement('h4');
+  const todoDescription = document.createElement('p');
+  const todoPriority = document.createElement('div');
+  todoTitle.textContent = todo.title;
+  todoDescription.textContent = todo.description;
+  todoPriority.style.height = '10px';
+  if (todo.priority == 'low') {
+    todoPriority.style.backgroundColor = 'green';
+  } else if (todo.priority == 'medium') {
+    todoPriority.style.backgroundColor = 'orange';
+  } else if (todo.priority == 'high') {
+    todoPriority.style.backgroundColor = 'red';
+  }
+
+  container.appendChild(todoTitle);
+  container.appendChild(todoDescription);
+  container.appendChild(todoPriority);
+  todoList.appendChild(container);
+}
 
