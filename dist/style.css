@@ -18,18 +18,18 @@ body {
   color: rgb(255, 255, 255);
 }
 
-#side-bar {
+.side-bar {
   background-color: var(--color1);
   display: flex;
   flex-direction: column;
   padding: 0 2vw;
 }
 
-#main {
+.main {
   background-color: var(--color4);
 }
 
-#side-bar-title {
+.side-bar-title {
   font-size: clamp(1.2rem, 2vw, 2rem);
   text-align: center;
   padding-bottom: 1rem;
@@ -43,7 +43,7 @@ li {
   font-weight: 400;
 }
 
-#todo-nav {
+.todo-nav {
   display: grid;
   row-gap: 1rem;
   padding: 0 20px;
@@ -56,7 +56,7 @@ i {
   justify-self: center;
 }
 
-#projects-title {
+.projects-title {
   text-align: center;
   padding-bottom: 1rem;
   border-bottom: 1px solid var(--color3);
@@ -64,7 +64,7 @@ i {
   font-weight: 500;
 }
 
-#add-project-button {
+.add-project-button {
   width: 1.5rem;
   height: 1.5rem;
   font-size: 1rem;
@@ -76,7 +76,7 @@ button {
   border-radius: 10px;
 }
 
-#todos {
+.todos {
   width: min(778px, 50vw);
   height: 500px;
   /* border: solid 1px red; */
@@ -98,13 +98,13 @@ span {
   font-weight: 400;
 }
 
-#add-todo-form-button {
+.add-todo-form-button {
   width: 1.5rem;
   height: 1.5rem;
   font-size: 1rem;
 }
 
-#add-todo-container {
+.add-todo-container {
   padding: 0.5rem 0.5rem;
   display: flex;
   align-items: center;
@@ -114,15 +114,15 @@ span {
   transition: background-color 0.5s;
 }
 
-#add-todo-container:hover {
+.add-todo-container:hover {
   background-color: var(--color3);
   cursor: pointer;
 }
 
-#add-todo-form {
+.add-todo-form {
   margin-top: 1rem;
   border: 1px var(--color3) solid;
-  display: none;
+  display: grid;
   grid-template-columns: 1fr 4fr;
   padding: 1rem;
   gap: 0.5rem;
@@ -149,7 +149,7 @@ label {
   font-size: 1rem;
 }
 
-#add-projects-container {
+.add-projects-container {
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -158,24 +158,24 @@ label {
   transition: background-color 0.5s;
 }
 
-#add-projects-container:hover {
+.add-projects-container:hover {
   background-color: var(--color3);
   cursor: pointer;
   color: var(--color2);
 }
 
-div#add-projects-container span {
+div.add-projects-container span {
   color: var(--color4);
   font-size: clamp(0.8rem, 1.3vw, 1.1rem);
 }
 
-#add-todo-flex-container {
+.add-todo-flex-container {
   display: flex;
   justify-content: space-between;
   grid-column: 1/3;
 }
 
-div#add-todo-flex-container div {
+div.add-todo-flex-container div {
   display: flex;
   gap: 1rem;
 }
@@ -201,11 +201,11 @@ div#button-wrapper button:focus {
 }
 
 @media (max-width: 700px) {
-  #side-bar {
+  .side-bar {
     display: none;
   }
 
-  #todos {
+  .todos {
     width: 90%;
   }
 
@@ -214,6 +214,10 @@ div#button-wrapper button:focus {
   }
 }
 
-#todo-list {
+.todo-list {
   color: var(--color1);
+}
+
+.hide {
+  display: none;
 }
