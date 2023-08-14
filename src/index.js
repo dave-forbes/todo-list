@@ -20,6 +20,13 @@ const todoDescriptionInput = document.querySelector('#todo-description-input');
 const todoDueDateInput = document.querySelector('#todo-due-date-input');
 const todoPriorityInput = document.querySelector('#todo-priority-input');
 const todoList = document.querySelector('.todo-list');
+const inboxButton = document.querySelector('#inbox');
+const todayButton = document.querySelector('#today');
+const upcomingButton = document.querySelector('#upcoming');
+
+inboxButton.addEventListener('click', (event) => switchTodoListType(event));
+todayButton.addEventListener('click', (event) => switchTodoListType(event));
+upcomingButton.addEventListener('click', (event) => switchTodoListType(event));
 
 
 addTodoFormButton.addEventListener('click', toggleForm);
@@ -40,7 +47,7 @@ addTodoButton.addEventListener('click', () => {
   todoListArray.push(newTodo);
   toggleForm();
   displayTodo(newTodo);
-  console.log(todoListArray);
+  todoListCounter();
 });
 
 function toggleForm() {
@@ -116,11 +123,22 @@ function displayTodoList(type) {
   }
 }
 
-const inboxButton = document.querySelector('#inbox');
-const todayButton = document.querySelector('#today');
-const upcomingButton = document.querySelector('#upcoming');
+function todoListCounter() {
+  let inboxCounter = 0;
+  let todayCounter = 0;
+  let upcomingCounter = 0;
+  todoListArray.forEach(item => {
+    inboxCounter++
+    if (item.dueDate == today) todayCounter++;
+    if (item.dueDate !== today) upcomingCounter++
+  });
+  document.querySelector('span[data-index="Inbox"]').textContent = inboxCounter;
+  document.querySelector('span[data-index="Today"]').textContent = todayCounter;
+  document.querySelector('span[data-index="Upcoming"]').textContent = upcomingCounter;
+}
 
-inboxButton.addEventListener('click', (event) => switchTodoListType(event));
-todayButton.addEventListener('click', (event) => switchTodoListType(event));
-upcomingButton.addEventListener('click', (event) => switchTodoListType(event));
+displayTodoList('Inbox');
+todoListCounter();
+
+
 
