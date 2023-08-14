@@ -73,21 +73,6 @@ function displayTodo(todo) {
     todoPriority.style.backgroundColor = 'red';
   }
 
-  function calculateRemainingDays(dueDate) {
-    if (dueDate == today) {
-      return `Due today!`;
-    } else if (dueDate == tomorrow) {
-      return `Due tomorrow!`;
-    } else {
-      for (let i = 0; i < 100; i++) {
-        nextDay.setDate(now.getDate() + i);
-        if (dueDate == dateFormat(nextDay, 'yyyy-mm-dd')) {
-          return `Due in ${i} days time...`
-        }
-      }
-    }
-  }
-
   todoDueDate.textContent = calculateRemainingDays(todo.dueDate);
 
   container.appendChild(todoTitle);
@@ -96,6 +81,21 @@ function displayTodo(todo) {
   container.appendChild(todoDueDate);
   container.classList.add('todo');
   todoList.appendChild(container);
+}
+
+function calculateRemainingDays(dueDate) {
+  if (dueDate == today) {
+    return `Due today!`;
+  } else if (dueDate == tomorrow) {
+    return `Due tomorrow!`;
+  } else {
+    for (let i = 0; i < 100; i++) {
+      nextDay.setDate(now.getDate() + i);
+      if (dueDate == dateFormat(nextDay, 'yyyy-mm-dd')) {
+        return `Due in ${i} days time...`
+      }
+    }
+  }
 }
 
 
