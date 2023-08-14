@@ -43,12 +43,11 @@ li {
   font-weight: 400;
 }
 
-.todo-nav {
+.todo-nav,
+.projects-nav {
   display: grid;
   row-gap: 1rem;
   padding: 0 20px;
-  grid-template: auto / 1fr 4fr;
-  align-items: center;
   font-size: clamp(0.8rem, 1.3vw, 1.1rem);
 }
 
@@ -149,13 +148,8 @@ label {
   font-size: 1rem;
 }
 
-.add-projects-container {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.5rem 20px;
-  border-radius: 10px;
-  transition: background-color 0.5s;
+.add-projects-container span {
+  padding: 0.5rem 0;
 }
 
 .add-projects-container:hover {
@@ -222,4 +216,18 @@ div#button-wrapper button:focus {
 
 .hide {
   display: none;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0 1rem;
+  border-radius: 10px;
+  transition: 0.3s;
+}
+
+.nav-item:hover {
+  background-color: var(--color3);
+  cursor: pointer;
 }
