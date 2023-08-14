@@ -1,9 +1,6 @@
-import dateFormat, { masks } from "dateformat";
-const now = new Date();
-const span = document.querySelector('.date');
+// import dateFormat, { masks } from "dateformat";
 const todoListArray = [];
 
-span.textContent = dateFormat(now, "dddd mmmm dS");
 
 const addTodoFormButton = document.querySelector('.add-todo-container');
 const addTodoForm = document.querySelector('.add-todo-form');
@@ -71,4 +68,19 @@ function displayTodo(todo) {
   container.classList.add('todo');
   todoList.appendChild(container);
 }
+
+function switchTodoListType(event) {
+  console.log(event.target.dataset.index);
+  const h3 = document.querySelector('.todo-list-type');
+  h3.innerHTML = event.target.dataset.index;
+}
+
+const inboxButton = document.querySelector('#inbox');
+const todayButton = document.querySelector('#today');
+const upcomingButton = document.querySelector('#upcoming');
+
+inboxButton.addEventListener('click', (event) => switchTodoListType(event));
+todayButton.addEventListener('click', (event) => switchTodoListType(event));
+upcomingButton.addEventListener('click', (event) => switchTodoListType(event));
+
 
