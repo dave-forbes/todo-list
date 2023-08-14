@@ -33,14 +33,6 @@ li {
   font-weight: 400;
 }
 
-h3 {
-  color: var(--color1);
-  font-size: 1.5rem;
-  padding-bottom: 1rem;
-  margin: 0;
-  border-bottom: var(--color3) 1px solid;
-}
-
 span {
   font-size: 1rem;
   color: var(--color2);
@@ -123,6 +115,14 @@ label {
 
 .main {
   background-color: var(--color4);
+}
+
+.todo-list-type {
+  color: var(--color1);
+  font-size: 1.5rem;
+  padding-bottom: 1rem;
+  margin: 0;
+  border-bottom: var(--color3) 1px solid;
 }
 
 .todos {
