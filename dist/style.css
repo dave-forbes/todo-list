@@ -216,6 +216,8 @@ div#button-wrapper button:focus {
 
 .todo-list {
   color: var(--color1);
+  border-bottom: var(--color3) 1px solid;
+  padding-bottom: 1rem;
 }
 
 .hide {
