@@ -24,6 +24,8 @@ const inboxButton = document.querySelector('#inbox');
 const todayButton = document.querySelector('#today');
 const upcomingButton = document.querySelector('#upcoming');
 
+let currentPage = 'Inbox';
+
 inboxButton.addEventListener('click', (event) => switchTodoListType(event));
 todayButton.addEventListener('click', (event) => switchTodoListType(event));
 upcomingButton.addEventListener('click', (event) => switchTodoListType(event));
@@ -46,7 +48,13 @@ addTodoButton.addEventListener('click', () => {
   const newTodo = CreateTodo(todoTitleInput.value, todoDescriptionInput.value, todoDueDateInput.value, todoPriorityInput.value);
   todoListArray.push(newTodo);
   toggleForm();
-  displayTodo(newTodo);
+  if (currentPage == 'Inbox') {
+    displayTodo(newTodo);
+  } else if (currentPage == 'Today' && newTodo.dueDate == today) {
+    displayTodo(newTodo);
+  } else if (currentPage == 'Upcoming' && newTodo.dueDate !== today) {
+    displayTodo(newTodo);
+  }
   todoListCounter();
 });
 
@@ -110,6 +118,7 @@ function switchTodoListType(event) {
   const todoListType = document.querySelector('.todo-list-type');
   todoListType.innerHTML = event.target.dataset.index;
   displayTodoList(event.target.dataset.index);
+  currentPage = event.target.dataset.index;
 }
 
 function displayTodoList(type) {
