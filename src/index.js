@@ -1,12 +1,12 @@
 import dateFormat, { masks } from "dateformat";
 const now = new Date();
-const span = document.querySelector('#date');
+const span = document.querySelector('.date');
 const todoListArray = [];
 
 span.textContent = dateFormat(now, "dddd mmmm dS");
 
-const addTodoFormButton = document.querySelector('#add-todo-container');
-const addTodoForm = document.querySelector('#add-todo-form');
+const addTodoFormButton = document.querySelector('.add-todo-container');
+const addTodoForm = document.querySelector('.add-todo-form');
 const cancelForm = document.querySelector('#cancel-form');
 const addTodoButton = document.querySelector('#add-todo-button');
 const todoTitleInput = document.querySelector('#todo-title-input');
@@ -36,16 +36,8 @@ addTodoButton.addEventListener('click', () => {
 });
 
 function toggleForm() {
-  if (addTodoForm.style.display == 'grid') {
-    addTodoForm.style.display = 'none';
-  } else if (addTodoForm.style.display == 'none') {
-    addTodoForm.style.display = 'grid';
-  }
-  if (addTodoFormButton.style.display == 'flex') {
-    addTodoFormButton.style.display = 'none';
-  } else if (addTodoFormButton.style.display == 'none') {
-    addTodoFormButton.style.display = 'flex';
-  }
+  addTodoForm.classList.toggle('hide');
+  addTodoFormButton.classList.toggle('hide');
   clearForm();
 }
 
@@ -57,7 +49,7 @@ function clearForm() {
 }
 
 function displayTodo(todo) {
-  const todoList = document.querySelector('#todo-list');
+  const todoList = document.querySelector('.todo-list');
   const container = document.createElement('div');
   const todoTitle = document.createElement('h4');
   const todoDescription = document.createElement('p');
