@@ -127,8 +127,6 @@ label {
 
 .todos {
   width: min(778px, 50vw);
-  height: 500px;
-  /* border: solid 1px red; */
   margin: 5rem auto;
   padding: 1rem;
 }
@@ -228,4 +226,9 @@ div#button-wrapper button:focus {
 
 .hide {
   display: none;
+}
+
+span[data-index] {
+  color: var(--color5);
+  font-size: clamp(0.8rem, 1.3vw, 1.1rem);
 }
