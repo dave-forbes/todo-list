@@ -46,6 +46,14 @@ function toggleForm() {
   } else if (addTodoFormButton.style.display == 'none') {
     addTodoFormButton.style.display = 'flex';
   }
+  clearForm();
+}
+
+function clearForm() {
+  todoTitleInput.value = '';
+  todoDescriptionInput.value = '';
+  todoDueDateInput.value = '';
+  todoPriorityInput.value = '';
 }
 
 
