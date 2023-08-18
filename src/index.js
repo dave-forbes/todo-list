@@ -30,6 +30,7 @@ const todoList = document.querySelector('.todo-list');
 const inboxButton = document.querySelector('#inbox');
 const todayButton = document.querySelector('#today');
 const upcomingButton = document.querySelector('#upcoming');
+const projectSelect = document.querySelector('#project-select')
 
 let currentPage = 'Inbox';
 
@@ -41,12 +42,13 @@ addProjectsFormButton.addEventListener('click', toggleProjectForm);
 
 cancelProjectsButton.addEventListener('click', toggleProjectForm);
 
-const CreateTodo = function (title, description, dueDate, priority) {
+const CreateTodo = function (title, description, dueDate, priority, project) {
   const todo = {};
   todo.title = title;
   todo.description = description;
   todo.dueDate = dueDate;
   todo.priority = priority
+  todo.project = project;
   return todo;
 }
 
@@ -55,7 +57,10 @@ addTodoButton.addEventListener('click', addTodo);
 addProjectsButton.addEventListener('click', addProject);
 
 function addProject() {
+  const newProject = new Array();
+  todoListArray.push(newProject);
   displayProject(addProjectsInput.value);
+  console.log(todoListArray);
 }
 
 function displayProject(title) {
@@ -75,7 +80,7 @@ function displayProject(title) {
 }
 
 function addTodo() {
-  const newTodo = CreateTodo(todoTitleInput.value, todoDescriptionInput.value, todoDueDateInput.value, todoPriorityInput.value);
+  const newTodo = CreateTodo(todoTitleInput.value, todoDescriptionInput.value, todoDueDateInput.value, todoPriorityInput.value, projectSelect.value);
   if (newTodo.dueDate == today) todoListArrayToday.push(newTodo);
   if (newTodo.dueDate !== today) todoListArrayUpcoming.push(newTodo);
   toggleTodoForm();
