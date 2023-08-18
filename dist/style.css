@@ -232,3 +232,17 @@ span[data-index] {
   color: var(--color5);
   font-size: clamp(0.8rem, 1.3vw, 1.1rem);
 }
+
+.todo h4 {
+  display: flex;
+  justify-content: space-between;
+}
+
+.todo>h4>i {
+  cursor: pointer;
+  color: var(--color5);
+}
+
+.todo>h4>i:hover {
+  color: var(--color1);
+}
