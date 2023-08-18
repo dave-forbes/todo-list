@@ -73,16 +73,16 @@ function clearForm() {
 
 function displayTodo(todo) {
   const container = document.createElement('div');
+
   const todoTitle = document.createElement('h4');
-  const todoDescription = document.createElement('p');
-  const todoPriority = document.createElement('div');
-  const todoDueDate = document.createElement('p');
-  const flexDiv = document.createElement('div');
-  flexDiv.style.cssText = 'display: flex; justify-content: space-evenly; align-items: center;'
   todoTitle.innerHTML = `${todo.title} <i class="fa-solid fa-trash"></i>`;
+
+  const todoDescription = document.createElement('p');
   todoDescription.textContent = todo.description;
-  todoPriority.style.width = '50%';
-  todoPriority.style.height = '10px';
+
+  const todoPriority = document.createElement('div');
+  todoPriority.style.cssText = 'width: 5rem; height: 1.2rem; border-radius: 10px;';
+
   if (todo.priority == 'low' || todo.priority == '') {
     todoPriority.style.backgroundColor = 'green';
   } else if (todo.priority == 'medium') {
@@ -90,11 +90,25 @@ function displayTodo(todo) {
   } else if (todo.priority == 'high') {
     todoPriority.style.backgroundColor = 'red';
   }
+  const priorityContainer = document.createElement('div');
+  priorityContainer.style.cssText = 'padding: 0.5rem; background-color: var(--color3); border-radius: 10px; display: grid; place-items: center;'
+  priorityContainer.appendChild(todoPriority);
+
+  const todoDueDate = document.createElement('p');
   todoDueDate.textContent = calculateRemainingDays(todo.dueDate);
+  todoDueDate.style.cssText = 'margin: 0;'
+
+  const dueDateContainer = document.createElement('div');
+  dueDateContainer.style.cssText = 'padding: 0.5rem; background-color: var(--color3); border-radius: 10px; display: grid; place-items: center;'
+  dueDateContainer.appendChild(todoDueDate);
+
+  const flexDiv = document.createElement('div');
+  flexDiv.style.cssText = 'display: flex; align-items: center; gap: 2rem;'
+  flexDiv.appendChild(priorityContainer);
+  flexDiv.appendChild(dueDateContainer);
+
   container.appendChild(todoTitle);
   container.appendChild(todoDescription);
-  flexDiv.appendChild(todoPriority);
-  flexDiv.appendChild(todoDueDate);
   container.appendChild(flexDiv);
   container.classList.add('todo');
   todoList.appendChild(container);
