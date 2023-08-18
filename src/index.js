@@ -141,7 +141,7 @@ function displayTodo(todo, index) {
   todoDueDate.style.cssText = 'margin: 0;'
 
   const dueDateContainer = document.createElement('div');
-  dueDateContainer.style.cssText = 'padding: 0.5rem; background-color: var(--color3); border-radius: 10px; display: grid; place-items: center;'
+  dueDateContainer.style.cssText = 'font-size: 0.9rem; padding: 0.5rem; background-color: var(--color3); border-radius: 10px; display: grid; place-items: center;'
   dueDateContainer.appendChild(todoDueDate);
 
   const flexDiv = document.createElement('div');
