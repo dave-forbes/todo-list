@@ -33,11 +33,6 @@ const upcomingButton = document.querySelector('#upcoming');
 
 let currentPage = 'Inbox';
 
-inboxButton.addEventListener('click', (event) => switchTodoListType(event));
-todayButton.addEventListener('click', (event) => switchTodoListType(event));
-upcomingButton.addEventListener('click', (event) => switchTodoListType(event));
-
-
 addTodoFormButton.addEventListener('click', toggleTodoForm);
 
 cancelTodoForm.addEventListener('click', toggleTodoForm);
@@ -171,12 +166,15 @@ function calculateRemainingDays(dueDate) {
   }
 }
 
+inboxButton.addEventListener('click', (event) => switchTodoListType(event));
+todayButton.addEventListener('click', (event) => switchTodoListType(event));
+upcomingButton.addEventListener('click', (event) => switchTodoListType(event));
 
 function switchTodoListType(event) {
   const todoListType = document.querySelector('.todo-list-type');
   todoListType.innerHTML = event.target.dataset.index;
-  displayTodoList(event.target.dataset.index);
   currentPage = event.target.dataset.index;
+  displayTodoList();
 }
 
 function displayTodoList() {
@@ -194,9 +192,9 @@ function todoListCounter() {
   let inboxCounter = 0;
   let todayCounter = 0;
   let upcomingCounter = 0;
-  todoListArray.forEach(array => array.forEach(item => inboxCounter++));
-  todoListArrayToday.forEach(item => todayCounter++);
-  todoListArrayUpcoming.forEach(item => upcomingCounter++);
+  todoListArray.forEach(array => array.forEach(() => inboxCounter++));
+  todoListArrayToday.forEach(() => todayCounter++);
+  todoListArrayUpcoming.forEach(() => upcomingCounter++);
 
   document.querySelector('span[data-index="Inbox"]').textContent = inboxCounter;
   document.querySelector('span[data-index="Today"]').textContent = todayCounter;
@@ -206,7 +204,7 @@ function todoListCounter() {
 displayTodoList();
 todoListCounter();
 
-document.addEventListener('click', (e) => removeTodo);
+document.addEventListener('click', (e) => removeTodo(e));
 
 function removeTodo(e) {
   if (e.target.classList.contains('fa-trash')) {
