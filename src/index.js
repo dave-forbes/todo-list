@@ -6,8 +6,8 @@ nextDay.setDate(now.getDate() + 1);
 const tomorrow = dateFormat(nextDay, 'yyyy-mm-dd');
 
 const todoListArray = [
-  { title: "Task for today", description: "something here", priority: "medium", dueDate: "2023-08-14" },
-  { title: "Task for tomorrow", description: "something here", priority: "medium", dueDate: "2023-08-15" },
+  { title: "Task for today", description: "something here", priority: "medium", dueDate: today },
+  { title: "Task for tomorrow", description: "something here", priority: "medium", dueDate: tomorrow },
   { title: "Task for next week", description: "something here", priority: "medium", dueDate: "2023-08-21" }
 ];
 
@@ -77,8 +77,11 @@ function displayTodo(todo) {
   const todoDescription = document.createElement('p');
   const todoPriority = document.createElement('div');
   const todoDueDate = document.createElement('p');
-  todoTitle.textContent = todo.title;
+  const flexDiv = document.createElement('div');
+  flexDiv.style.cssText = 'display: flex; justify-content: space-evenly; align-items: center;'
+  todoTitle.innerHTML = `${todo.title} <i class="fa-solid fa-trash"></i>`;
   todoDescription.textContent = todo.description;
+  todoPriority.style.width = '50%';
   todoPriority.style.height = '10px';
   if (todo.priority == 'low' || todo.priority == '') {
     todoPriority.style.backgroundColor = 'green';
@@ -87,13 +90,12 @@ function displayTodo(todo) {
   } else if (todo.priority == 'high') {
     todoPriority.style.backgroundColor = 'red';
   }
-
   todoDueDate.textContent = calculateRemainingDays(todo.dueDate);
-
   container.appendChild(todoTitle);
   container.appendChild(todoDescription);
-  container.appendChild(todoPriority);
-  container.appendChild(todoDueDate);
+  flexDiv.appendChild(todoPriority);
+  flexDiv.appendChild(todoDueDate);
+  container.appendChild(flexDiv);
   container.classList.add('todo');
   todoList.appendChild(container);
 }
@@ -130,6 +132,7 @@ function displayTodoList(type) {
   } else if (type == 'Upcoming') {
     todoListArray.forEach(item => { if (item.dueDate !== today) displayTodo(item) });
   }
+  selectTrashIcons();
 }
 
 function todoListCounter() {
@@ -148,6 +151,17 @@ function todoListCounter() {
 
 displayTodoList('Inbox');
 todoListCounter();
+
+function selectTrashIcons() {
+  const trashIcons = document.querySelectorAll('.todo>h4>i');
+  trashIcons.forEach(icon => icon.addEventListener('click', (e) => {
+    e.target.parentElement.parentElement.remove();
+  }))
+}
+
+selectTrashIcons();
+
+
 
 
 
