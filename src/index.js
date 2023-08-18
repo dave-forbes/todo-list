@@ -10,7 +10,9 @@ const todoListArrayToday = [{ title: "Task for today", description: "something h
 const todoListArrayUpcoming = [{ title: "Task for tomorrow", description: "something here", priority: "medium", dueDate: tomorrow },
 { title: "Task for next week", description: "something here", priority: "medium", dueDate: "2023-08-21" }];
 
-const todoListArray = [todoListArrayToday, todoListArrayUpcoming
+const project1 = [{ title: 'Study Web Development', description: '', dueDate: '2023-08-18', priority: '', project: 'Project 1' }];
+
+const todoListArray = [todoListArrayToday, todoListArrayUpcoming, project1
 ];
 
 const addTodoFormButton = document.querySelector('.add-todo-container');
@@ -216,6 +218,13 @@ function todoListCounter() {
   todoListArray.forEach(array => array.forEach(() => inboxCounter++));
   todoListArrayToday.forEach(() => todayCounter++);
   todoListArrayUpcoming.forEach(() => upcomingCounter++);
+
+  for (let i = 2; i < todoListArray.length; i++) {
+    let counter = 0;
+    todoListArray[i].forEach(item => counter++);
+    let project = todoListArray[i][0].project;
+    document.querySelector(`span[data-index="${project}"]`).textContent = counter;
+  }
 
   document.querySelector('span[data-index="Inbox"]').textContent = inboxCounter;
   document.querySelector('span[data-index="Today"]').textContent = todayCounter;
