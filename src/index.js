@@ -15,7 +15,12 @@ const todoListArray = [todoListArrayToday, todoListArrayUpcoming
 
 const addTodoFormButton = document.querySelector('.add-todo-container');
 const addTodoForm = document.querySelector('.add-todo-form');
-const cancelForm = document.querySelector('#cancel-form');
+const addProjectsFormButton = document.querySelector('.add-projects-container');
+const addProjectsForm = document.querySelector('.add-projects-form');
+const addProjectsInput = document.querySelector('#add-projects-input');
+const addProjectsButton = document.querySelector('#add-projects-button');
+const cancelProjectsButton = document.querySelector('#cancel-project-form-button');
+const cancelTodoForm = document.querySelector('#cancel-form');
 const addTodoButton = document.querySelector('#add-todo-button');
 const todoTitleInput = document.querySelector('#todo-title-input');
 const todoDescriptionInput = document.querySelector('#todo-description-input');
@@ -33,9 +38,13 @@ todayButton.addEventListener('click', (event) => switchTodoListType(event));
 upcomingButton.addEventListener('click', (event) => switchTodoListType(event));
 
 
-addTodoFormButton.addEventListener('click', toggleForm);
+addTodoFormButton.addEventListener('click', toggleTodoForm);
 
-cancelForm.addEventListener('click', toggleForm);
+cancelTodoForm.addEventListener('click', toggleTodoForm);
+
+addProjectsFormButton.addEventListener('click', toggleProjectForm);
+
+cancelProjectsButton.addEventListener('click', toggleProjectForm);
 
 const CreateTodo = function (title, description, dueDate, priority) {
   const todo = {};
@@ -48,23 +57,39 @@ const CreateTodo = function (title, description, dueDate, priority) {
 
 addTodoButton.addEventListener('click', addTodo);
 
+addProjectsButton.addEventListener('click', addProject);
+
+function addProject() {
+  console.log('hi');
+}
+
 function addTodo() {
   const newTodo = CreateTodo(todoTitleInput.value, todoDescriptionInput.value, todoDueDateInput.value, todoPriorityInput.value);
   if (newTodo.dueDate == today) todoListArrayToday.push(newTodo);
   if (newTodo.dueDate !== today) todoListArrayUpcoming.push(newTodo);
-  toggleForm();
+  toggleTodoForm();
   displayTodoList();
   todoListCounter();
   console.log(todoListArray);
 }
 
-function toggleForm() {
+function toggleTodoForm() {
   addTodoForm.classList.toggle('hide');
   addTodoFormButton.classList.toggle('hide');
-  clearForm();
+  clearTodoForm();
 }
 
-function clearForm() {
+function toggleProjectForm() {
+  addProjectsForm.classList.toggle('hide');
+  addProjectsFormButton.classList.toggle('hide');
+  clearProjectsForm();
+}
+
+function clearProjectsForm() {
+  addProjectsInput.value = '';
+}
+
+function clearTodoForm() {
   todoTitleInput.value = '';
   todoDescriptionInput.value = '';
   todoDueDateInput.value = '';
