@@ -101,6 +101,7 @@ label {
   border-radius: 5px;
   background-color: var(--color3);
   padding: 0.5rem;
+  margin: 0 auto;
 }
 
 .add-projects-form {
@@ -114,6 +115,7 @@ label {
 .add-projects-form button {
   padding: 0.5rem;
   transition: 0.3s;
+  width: fit-content;
 }
 
 .add-projects-form button:hover,
@@ -124,6 +126,7 @@ label {
 
 .add-project-buttons {
   display: flex;
+  flex-direction: row;
   justify-content: space-evenly;
 }
 
