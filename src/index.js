@@ -1,14 +1,16 @@
-import dateFormat, { masks } from "dateformat";
+import dateFormat from "dateformat";
 const now = new Date();
 const today = dateFormat(now, 'yyyy-mm-dd');
 const nextDay = new Date(now);
 nextDay.setDate(now.getDate() + 1);
 const tomorrow = dateFormat(nextDay, 'yyyy-mm-dd');
 
-const todoListArray = [
-  { title: "Task for today", description: "something here", priority: "medium", dueDate: today },
-  { title: "Task for tomorrow", description: "something here", priority: "medium", dueDate: tomorrow },
-  { title: "Task for next week", description: "something here", priority: "medium", dueDate: "2023-08-21" }
+const todoListArrayToday = [{ title: "Task for today", description: "something here", priority: "medium", dueDate: today },
+];
+const todoListArrayUpcoming = [{ title: "Task for tomorrow", description: "something here", priority: "medium", dueDate: tomorrow },
+{ title: "Task for next week", description: "something here", priority: "medium", dueDate: "2023-08-21" }];
+
+const todoListArray = [todoListArrayToday, todoListArrayUpcoming
 ];
 
 const addTodoFormButton = document.querySelector('.add-todo-container');
@@ -44,19 +46,17 @@ const CreateTodo = function (title, description, dueDate, priority) {
   return todo;
 }
 
-addTodoButton.addEventListener('click', () => {
+addTodoButton.addEventListener('click', addTodo);
+
+function addTodo() {
   const newTodo = CreateTodo(todoTitleInput.value, todoDescriptionInput.value, todoDueDateInput.value, todoPriorityInput.value);
-  todoListArray.push(newTodo);
+  if (newTodo.dueDate == today) todoListArrayToday.push(newTodo);
+  if (newTodo.dueDate !== today) todoListArrayUpcoming.push(newTodo);
   toggleForm();
-  if (currentPage == 'Inbox') {
-    displayTodo(newTodo);
-  } else if (currentPage == 'Today' && newTodo.dueDate == today) {
-    displayTodo(newTodo);
-  } else if (currentPage == 'Upcoming' && newTodo.dueDate !== today) {
-    displayTodo(newTodo);
-  }
+  displayTodoList();
   todoListCounter();
-});
+  console.log(todoListArray);
+}
 
 function toggleForm() {
   addTodoForm.classList.toggle('hide');
@@ -71,11 +71,28 @@ function clearForm() {
   todoPriorityInput.value = '';
 }
 
-function displayTodo(todo) {
+function displayTodo(todo, index) {
   const container = document.createElement('div');
+  container.setAttribute('data-index', index);
 
-  const todoTitle = document.createElement('h4');
-  todoTitle.innerHTML = `${todo.title} <i class="fa-solid fa-trash"></i>`;
+  if (todo.dueDate == today) container.classList.add('today');
+  if (todo.dueDate !== today) container.classList.add('upmcoming');
+
+  const todoTitle = document.createElement('div');
+  todoTitle.classList.add('todo-title');
+  const todoTitleText = document.createElement('h4');
+  todoTitleText.textContent = todo.title;
+  const todoCheckBox = document.createElement('input');
+  todoCheckBox.setAttribute('type', 'checkbox');
+  const todoTitleWrapper = document.createElement('div');
+  todoTitleWrapper.style.cssText = 'display: flex; gap: 1rem; align-items: center;';
+  todoTitleWrapper.appendChild(todoCheckBox);
+  todoTitleWrapper.appendChild(todoTitleText);
+  todoTitle.appendChild(todoTitleWrapper);
+  const todoTrashIcon = document.createElement('i');
+  todoTrashIcon.classList.add('fa-solid');
+  todoTrashIcon.classList.add('fa-trash');
+  todoTitle.appendChild(todoTrashIcon);
 
   const todoDescription = document.createElement('p');
   todoDescription.textContent = todo.description;
@@ -137,43 +154,54 @@ function switchTodoListType(event) {
   currentPage = event.target.dataset.index;
 }
 
-function displayTodoList(type) {
+function displayTodoList() {
   todoList.innerHTML = '';
-  if (type == 'Inbox') {
-    todoListArray.forEach(item => displayTodo(item));
-  } else if (type == 'Today') {
-    todoListArray.forEach(item => { if (item.dueDate == today) displayTodo(item) });
-  } else if (type == 'Upcoming') {
-    todoListArray.forEach(item => { if (item.dueDate !== today) displayTodo(item) });
+  if (currentPage == 'Inbox') {
+    todoListArray.forEach(array => array.forEach((item, index) => displayTodo(item, index)));
+  } else if (currentPage == 'Today') {
+    todoListArrayToday.forEach((item, index) => { if (item.dueDate == today) displayTodo(item, index) });
+  } else if (currentPage == 'Upcoming') {
+    todoListArrayUpcoming.forEach((item, index) => { if (item.dueDate !== today) displayTodo(item, index) });
   }
-  selectTrashIcons();
 }
 
 function todoListCounter() {
   let inboxCounter = 0;
   let todayCounter = 0;
   let upcomingCounter = 0;
-  todoListArray.forEach(item => {
-    inboxCounter++
-    if (item.dueDate == today) todayCounter++;
-    if (item.dueDate !== today) upcomingCounter++
-  });
+  todoListArray.forEach(array => array.forEach(item => inboxCounter++));
+  todoListArrayToday.forEach(item => todayCounter++);
+  todoListArrayUpcoming.forEach(item => upcomingCounter++);
+
   document.querySelector('span[data-index="Inbox"]').textContent = inboxCounter;
   document.querySelector('span[data-index="Today"]').textContent = todayCounter;
   document.querySelector('span[data-index="Upcoming"]').textContent = upcomingCounter;
 }
 
-displayTodoList('Inbox');
+displayTodoList();
 todoListCounter();
 
-function selectTrashIcons() {
-  const trashIcons = document.querySelectorAll('.todo>h4>i');
-  trashIcons.forEach(icon => icon.addEventListener('click', (e) => {
-    e.target.parentElement.parentElement.remove();
-  }))
+document.addEventListener('click', (e) => removeTodo);
+
+function removeTodo(e) {
+  if (e.target.classList.contains('fa-trash')) {
+    if (e.target.parentElement.parentElement.classList.contains('today')) {
+      const index = e.target.parentElement.parentElement.dataset.index;
+      todoListArrayToday.splice(index, 1);
+      displayTodoList();
+      todoListCounter();
+      console.log(todoListArray);
+    } else {
+      const index = e.target.parentElement.parentElement.dataset.index;
+      todoListArrayUpcoming.splice(index, 1);
+      displayTodoList();
+      todoListCounter();
+      console.log(todoListArray);
+    }
+  }
 }
 
-selectTrashIcons();
+console.log(todoListArray);
 
 
 
