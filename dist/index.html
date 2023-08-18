@@ -34,7 +34,7 @@
       <div id=projects>
         <div class="nav-item project">
           <i class="fa-solid fa-diagram-project"></i>
-          <p>Project 1 - </p>
+          <p>Project 1 - <span data-index="Project 1"></span></p>
         </div>
       </div>
       <div class="add-projects-container nav-item">
@@ -73,9 +73,9 @@
         </select>
         <label>Project</label>
         <div class="flex">
-          <select>
-            <option>Inbox</option>
-            <option>Project 1</option>
+          <select id="project-select">
+            <option value="Inbox">Inbox</option>
+            <option value="Project 1">Project 1</option>
           </select>
           <div id="button-wrapper" class="flex">
             <button id="add-todo-button">Add Todo</button>
