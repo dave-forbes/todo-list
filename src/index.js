@@ -55,7 +55,23 @@ addTodoButton.addEventListener('click', addTodo);
 addProjectsButton.addEventListener('click', addProject);
 
 function addProject() {
-  console.log('hi');
+  displayProject(addProjectsInput.value);
+}
+
+function displayProject(title) {
+  const projectsDiv = document.querySelector('#projects');
+  const p = document.createElement('p');
+  p.style.textAlign = 'center';
+  const projectTrashIcon = document.createElement('i');
+  projectTrashIcon.classList.add('fa-solid');
+  projectTrashIcon.classList.add('fa-diagram-project');
+  p.textContent = `${title} - `;
+  const div = document.createElement('div');
+  div.classList.add('nav-item')
+  div.appendChild(projectTrashIcon);
+  div.appendChild(p);
+  projectsDiv.appendChild(div);
+  toggleProjectForm();
 }
 
 function addTodo() {
