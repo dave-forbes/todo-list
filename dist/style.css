@@ -3,7 +3,7 @@
 :root {
   --color1: #000000;
   --color2: #8a817c;
-  --color3: #cfccc6;
+  --color3: #eae5df;
   --color4: #ffffff;
   --color5: #e0afa0;
   font-family: 'Noto Sans', sans-serif;
@@ -84,7 +84,7 @@ label {
   font-weight: 500;
 }
 
-.add-project-button {
+.add-project-form-button {
   width: 1.5rem;
   height: 1.5rem;
   font-size: 1rem;
@@ -95,6 +95,36 @@ label {
   padding: 0.5rem 0;
   color: var(--color4);
   font-size: clamp(0.8rem, 1.3vw, 1.1rem);
+}
+
+#add-projects-input {
+  border-radius: 5px;
+  background-color: var(--color3);
+  padding: 0.5rem;
+}
+
+.add-projects-form {
+  background-color: var(--color2);
+  border-radius: 10px;
+  padding: 1rem;
+  display: grid;
+  gap: 1rem;
+}
+
+.add-projects-form button {
+  padding: 0.5rem;
+  transition: 0.3s;
+}
+
+.add-projects-form button:hover,
+.add-projects-form button:focus {
+  background-color: var(--color1);
+  color: var(--color4);
+}
+
+.add-project-buttons {
+  display: flex;
+  justify-content: space-evenly;
 }
 
 .nav-item {
@@ -221,7 +251,10 @@ div#button-wrapper button:focus {
 }
 
 .todo {
-  padding-bottom: 1rem;
+  padding: 1rem;
+  border: 1px solid var(--color3);
+  border-radius: 10px;
+  margin: 1rem 0;
 }
 
 .hide {
@@ -233,16 +266,26 @@ span[data-index] {
   font-size: clamp(0.8rem, 1.3vw, 1.1rem);
 }
 
-.todo h4 {
-  display: flex;
-  justify-content: space-between;
+.todo-title h4 {
+  margin: 0;
 }
 
-.todo>h4>i {
+.todo .todo-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.todo .todo-title i {
   cursor: pointer;
   color: var(--color5);
 }
 
-.todo>h4>i:hover {
+.todo .todo-title i:hover {
   color: var(--color1);
+}
+
+input[type="checkbox"] {
+  width: 1rem;
+  height: 1rem;
 }
