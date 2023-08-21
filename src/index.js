@@ -10,7 +10,7 @@ const todoListArrayToday = [{ title: "Task for today", description: "something h
 const todoListArrayUpcoming = [{ title: "Task for tomorrow", description: "something here", priority: "medium", dueDate: tomorrow },
 { title: "Task for next week", description: "something here", priority: "medium", dueDate: "2023-08-28" }];
 
-const project = ['Project', { title: 'Study Web Development', description: '', dueDate: '2023-08-18', priority: '', project: 'Project' }];
+const project = ['Project', { title: 'Study Web Development', description: '', dueDate: '2023-08-25', priority: '', project: 'Project' }];
 
 const todoListArray = [todoListArrayToday, todoListArrayUpcoming, project
 ];
@@ -155,17 +155,20 @@ function displayTodo(todo, index) {
   todoDescription.textContent = todo.description;
 
   const todoPriority = document.createElement('div');
-  todoPriority.style.cssText = 'width: 5rem; height: 1.2rem; border-radius: 10px;';
+  todoPriority.style.cssText = 'border-radius: 6px; font-size: 0.7rem; padding:0.2rem 0.4rem; display: grid; place-items: center; font-weight: 600;';
 
   if (todo.priority == 'low' || todo.priority == '') {
     todoPriority.style.backgroundColor = 'green';
+    todoPriority.textContent = 'Low Priority';
   } else if (todo.priority == 'medium') {
     todoPriority.style.backgroundColor = 'orange';
+    todoPriority.textContent = 'Medium Priority';
   } else if (todo.priority == 'high') {
     todoPriority.style.backgroundColor = 'red';
+    todoPriority.textContent = 'High Priority';
   }
   const priorityContainer = document.createElement('div');
-  priorityContainer.style.cssText = 'padding: 0.5rem; background-color: var(--color3); border-radius: 10px; display: grid; place-items: center;'
+  priorityContainer.style.cssText = 'padding: 0.4rem; background-color: var(--color3); border-radius: 10px; display: grid; place-items: center;'
   priorityContainer.appendChild(todoPriority);
 
   const todoDueDate = document.createElement('p');
@@ -180,6 +183,12 @@ function displayTodo(todo, index) {
   flexDiv.style.cssText = 'display: flex; align-items: center; gap: 2rem;'
   flexDiv.appendChild(priorityContainer);
   flexDiv.appendChild(dueDateContainer);
+  if (todo.hasOwnProperty('project')) {
+    const projectContainer = document.createElement('div');
+    projectContainer.style.cssText = 'font-size: 0.9rem; padding: 0.5rem; background-color: var(--color3); border-radius: 10px; display: grid; place-items: center;'
+    projectContainer.innerHTML = todo.project;
+    flexDiv.appendChild(projectContainer);
+  }
 
   container.appendChild(todoTitle);
   container.appendChild(todoDescription);
@@ -202,10 +211,6 @@ function calculateRemainingDays(dueDate) {
     }
   }
 }
-
-// inboxButton.addEventListener('click', (event) => switchTodoListType(event));
-// todayButton.addEventListener('click', (event) => switchTodoListType(event));
-// upcomingButton.addEventListener('click', (event) => switchTodoListType(event));
 
 const sideBar = document.querySelector('.side-bar');
 
@@ -247,8 +252,8 @@ function todoListCounter() {
       inboxCounter++
     }
   }));
-  todoListArray.forEach(array => array.forEach((item) => { if (item.dueDate == today) todayCounter++ }))
-  todoListArrayUpcoming.forEach(() => upcomingCounter++);
+  todoListArray.forEach(array => array.forEach((item) => { if (item.dueDate == today && typeof (item) == 'object') todayCounter++ }))
+  todoListArray.forEach(array => array.forEach((item) => { if (item.dueDate !== today && typeof (item) == 'object') upcomingCounter++ }))
 
   for (let i = 2; i < todoListArray.length; i++) {
     let counter = 0;
