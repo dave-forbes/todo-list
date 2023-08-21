@@ -5,15 +5,16 @@ const nextDay = new Date(now);
 nextDay.setDate(now.getDate() + 1);
 const tomorrow = dateFormat(nextDay, 'yyyy-mm-dd');
 
-const todoListArrayToday = [{ title: "Task for today", description: "something here", priority: "medium", dueDate: today },
+const todoListArrayToday = [{ title: "Task for today", description: "something here", priority: "medium", dueDate: today, completed: false },
 ];
-const todoListArrayUpcoming = [{ title: "Task for tomorrow", description: "something here", priority: "medium", dueDate: tomorrow },
-{ title: "Task for next week", description: "something here", priority: "medium", dueDate: "2023-08-28" }];
+const todoListArrayUpcoming = [{ title: "Task for tomorrow", description: "something here", priority: "medium", dueDate: tomorrow, completed: false },
+{ title: "Task for next week", description: "something here", priority: "medium", dueDate: "2023-08-28", completed: false }];
 
-const project = ['Project', { title: 'Study Web Development', description: '', dueDate: '2023-08-25', priority: '', project: 'Project' }];
+const todoListCompleted = [];
 
-const todoListArray = [todoListArrayToday, todoListArrayUpcoming, project
-];
+const project = ['Project', { title: 'Study Web Development', description: '', dueDate: '2023-08-25', priority: '', project: 'Project', completed: false }];
+
+const todoListArray = [todoListArrayToday, todoListArrayUpcoming, todoListCompleted, project];
 
 const addTodoFormButton = document.querySelector('.add-todo-container');
 const addTodoForm = document.querySelector('.add-todo-form');
@@ -41,13 +42,14 @@ addProjectsFormButton.addEventListener('click', toggleProjectForm);
 
 cancelProjectsButton.addEventListener('click', toggleProjectForm);
 
-const CreateTodo = function (title, description, dueDate, priority, project) {
+const CreateTodo = function (title, description, dueDate, priority, project, completed) {
   const todo = {};
   todo.title = title;
   todo.description = description;
   todo.dueDate = dueDate;
   todo.priority = priority
   todo.project = project;
+  todo.completed = completed;
   return todo;
 }
 
@@ -87,7 +89,7 @@ function displayProject(title) {
 }
 
 function addTodo() {
-  const newTodo = CreateTodo(todoTitleInput.value, todoDescriptionInput.value, todoDueDateInput.value, todoPriorityInput.value, projectSelect.value);
+  const newTodo = CreateTodo(todoTitleInput.value, todoDescriptionInput.value, todoDueDateInput.value, todoPriorityInput.value, projectSelect.value, false);
   if (newTodo.dueDate == today && newTodo.hasOwnProperty('project') === false) todoListArrayToday.push(newTodo);
   if (newTodo.dueDate !== today && newTodo.hasOwnProperty('project') === false) todoListArrayUpcoming.push(newTodo);
   if (newTodo.hasOwnProperty('project')) {
@@ -141,6 +143,7 @@ function displayTodo(todo, index) {
   todoTitleText.textContent = todo.title;
   const todoCheckBox = document.createElement('input');
   todoCheckBox.setAttribute('type', 'checkbox');
+  todoCheckBox.classList.add('check-box');
   const todoTitleWrapper = document.createElement('div');
   todoTitleWrapper.style.cssText = 'display: flex; gap: 1rem; align-items: center;';
   todoTitleWrapper.appendChild(todoCheckBox);
@@ -190,6 +193,13 @@ function displayTodo(todo, index) {
     flexDiv.appendChild(projectContainer);
   }
 
+  if (todo.completed == true) {
+    container.classList.add('line-through');
+    todoTrashIcon.style.display = 'none';
+    todoCheckBox.checked = true;
+    todoCheckBox.disabled = true;
+  }
+
   container.appendChild(todoTitle);
   container.appendChild(todoDescription);
   container.appendChild(flexDiv);
@@ -231,15 +241,15 @@ function switchTodoListType(e) {
 function displayTodoList() {
   todoList.innerHTML = '';
   if (currentPage == 'Inbox') {
-    todoListArray.forEach(array => array.forEach((item, index) => {
-      if (typeof (item) == 'object') displayTodo(item, index);
-    }));
+    todoListArray.forEach(array => array.forEach((item, index) => { if (typeof (item) == 'object' && item.completed == false) displayTodo(item, index) }));
   } else if (currentPage == 'Today') {
-    todoListArray.forEach(array => array.forEach((item, index) => { if (item.dueDate == today) displayTodo(item, index) }));
+    todoListArray.forEach(array => array.forEach((item, index) => { if (item.dueDate == today && item.completed == false) displayTodo(item, index) }));
   } else if (currentPage == 'Upcoming') {
-    todoListArray.forEach(array => array.forEach((item, index) => { if (item.dueDate !== today && typeof (item) == 'object') displayTodo(item, index) }));
+    todoListArray.forEach(array => array.forEach((item, index) => { if (item.dueDate !== today && typeof (item) == 'object' && item.completed == false) displayTodo(item, index) }));
+  } else if (currentPage == 'Completed') {
+    todoListCompleted.forEach((item, index) => displayTodo(item, index));
   } else {
-    todoListArray.forEach(array => array.forEach((item, index) => { if (item.project == currentPage && typeof (item) == 'object') displayTodo(item, index) }));
+    todoListArray.forEach(array => array.forEach((item, index) => { if (item.project == currentPage && typeof (item) == 'object' && item.completed == false) displayTodo(item, index) }));
   }
 }
 
@@ -247,21 +257,22 @@ function todoListCounter() {
   let inboxCounter = 0;
   let todayCounter = 0;
   let upcomingCounter = 0;
+  let completedCounter = 0;
   todoListArray.forEach(array => array.forEach((item) => {
-    if (typeof (item) == 'object') {
-      inboxCounter++
-    }
+    if (typeof (item) == 'object' && item.completed == false) { inboxCounter++ }
   }));
-  todoListArray.forEach(array => array.forEach((item) => { if (item.dueDate == today && typeof (item) == 'object') todayCounter++ }))
-  todoListArray.forEach(array => array.forEach((item) => { if (item.dueDate !== today && typeof (item) == 'object') upcomingCounter++ }))
+  todoListArray.forEach(array => array.forEach((item) => {
+    if (item.dueDate == today && typeof (item) == 'object' && item.completed == false) todayCounter++
+  }));
+  todoListArray.forEach(array => array.forEach((item) => {
+    if (item.dueDate !== today && typeof (item) == 'object' && item.completed == false) upcomingCounter++
+  }));
 
-  for (let i = 2; i < todoListArray.length; i++) {
+  todoListCompleted.forEach(() => completedCounter++);
+
+  for (let i = 3; i < todoListArray.length; i++) {
     let counter = 0;
-    todoListArray[i].forEach(item => {
-      if (typeof (item) == 'object') {
-        counter++
-      }
-    });
+    todoListArray[i].forEach(item => { if (typeof (item) == 'object') { counter++ } });
     let project = todoListArray[i][0];
     document.querySelector(`span[data-index="${project}"]`).textContent = counter;
   }
@@ -269,6 +280,7 @@ function todoListCounter() {
   document.querySelector('span[data-index="Inbox"]').textContent = inboxCounter;
   document.querySelector('span[data-index="Today"]').textContent = todayCounter;
   document.querySelector('span[data-index="Upcoming"]').textContent = upcomingCounter;
+  document.querySelector('span[data-index="Completed"]').textContent = completedCounter;
 }
 
 displayTodoList();
@@ -305,4 +317,48 @@ function removeTodo(e) {
   }
 }
 
+document.addEventListener('click', (e) => completeTodo(e));
+
+function completeTodo(e) {
+  if (e.target.classList.contains('check-box')) {
+    if (e.target.parentElement.parentElement.parentElement.classList.contains('today')) {
+      e.target.parentElement.parentElement.parentElement.classList.add('line-through');
+      setTimeout(() => {
+        const index = e.target.parentElement.parentElement.parentElement.dataset.index;
+        todoListArrayToday[index].completed = true;
+        const completedTodo = todoListArrayToday.splice(index, 1);
+        todoListCompleted.push(completedTodo[0]);
+        displayTodoList();
+        todoListCounter();
+      }, 1000);
+    } else if (e.target.parentElement.parentElement.parentElement.classList.contains('upcoming')) {
+      e.target.parentElement.parentElement.parentElement.classList.add('line-through');
+      setTimeout(() => {
+        const index = e.target.parentElement.parentElement.parentElement.dataset.index;
+        todoListArrayUpcoming[index].completed = true;
+        const completedTodo = todoListArrayUpcoming.splice(index, 1);
+        todoListCompleted.push(completedTodo[0]);
+        displayTodoList();
+        todoListCounter();
+      }, 1000);
+    } else {
+      const project = e.target.parentElement.parentElement.parentElement.classList[0];
+      console.log(e.target.parentElement.parentElement.parentElement);
+      e.target.parentElement.parentElement.parentElement.classList.add('line-through');
+      for (let i = 2; i < todoListArray.length; i++) {
+        if (todoListArray[i][0] == project) {
+          setTimeout(() => {
+            const index = e.target.parentElement.parentElement.parentElement.dataset.index;
+            todoListArray[i][index].completed = true;
+            const completedTodo = todoListArray[i].splice(index, 1);
+            todoListCompleted.push(completedTodo[0]);
+            displayTodoList();
+            todoListCounter();
+          }, 1000);
+        }
+      }
+
+    }
+  }
+}
 
