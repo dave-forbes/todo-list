@@ -206,7 +206,7 @@ function calculateRemainingDays(dueDate) {
     for (let i = 0; i < 100; i++) {
       nextDay.setDate(now.getDate() + i);
       if (dueDate == dateFormat(nextDay, 'yyyy-mm-dd')) {
-        return `Due in ${i} days time...`
+        return `Due in ${i} days`
       }
     }
   }
