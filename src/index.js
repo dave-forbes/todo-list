@@ -89,7 +89,13 @@ function displayProject(title) {
 }
 
 function addTodo() {
-  const newTodo = CreateTodo(todoTitleInput.value, todoDescriptionInput.value, todoDueDateInput.value, todoPriorityInput.value, projectSelect.value, false);
+  const newTodo = CreateTodo(
+    todoTitleInput.value,
+    todoDescriptionInput.value,
+    todoDueDateInput.value,
+    todoPriorityInput.value,
+    projectSelect.value,
+    false);
   if (newTodo.dueDate == today && newTodo.hasOwnProperty('project') === false) todoListArrayToday.push(newTodo);
   if (newTodo.dueDate !== today && newTodo.hasOwnProperty('project') === false) todoListArrayUpcoming.push(newTodo);
   if (newTodo.hasOwnProperty('project')) {
@@ -357,7 +363,6 @@ function completeTodo(e) {
           }, 1000);
         }
       }
-
     }
   }
 }
