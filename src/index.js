@@ -78,6 +78,9 @@ function displayProject(title) {
   div.appendChild(projectTrashIcon);
   div.appendChild(p);
   projectsDiv.appendChild(div);
+  p.setAttribute('data-index', title);
+  projectTrashIcon.setAttribute('data-index', title);
+  div.setAttribute('data-index', title);
   toggleProjectForm();
 }
 
