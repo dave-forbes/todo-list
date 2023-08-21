@@ -219,6 +219,8 @@ function displayTodoList() {
     todoListArray.forEach(array => array.forEach((item, index) => { if (item.dueDate == today) displayTodo(item, index) }));
   } else if (currentPage == 'Upcoming') {
     todoListArray.forEach(array => array.forEach((item, index) => { if (item.dueDate !== today) displayTodo(item, index) }));
+  } else {
+    todoListArray.forEach(array => array.forEach((item, index) => { if (item.project == currentPage) displayTodo(item, index) }));
   }
 }
 
