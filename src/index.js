@@ -189,15 +189,23 @@ function calculateRemainingDays(dueDate) {
   }
 }
 
-inboxButton.addEventListener('click', (event) => switchTodoListType(event));
-todayButton.addEventListener('click', (event) => switchTodoListType(event));
-upcomingButton.addEventListener('click', (event) => switchTodoListType(event));
+// inboxButton.addEventListener('click', (event) => switchTodoListType(event));
+// todayButton.addEventListener('click', (event) => switchTodoListType(event));
+// upcomingButton.addEventListener('click', (event) => switchTodoListType(event));
 
-function switchTodoListType(event) {
-  const todoListType = document.querySelector('.todo-list-type');
-  todoListType.innerHTML = event.target.dataset.index;
-  currentPage = event.target.dataset.index;
-  displayTodoList();
+const sideBar = document.querySelector('.side-bar');
+
+sideBar.addEventListener('click', (e) => switchTodoListType(e));
+
+function switchTodoListType(e) {
+  console.log(e.target.parentElement);
+  if (e.target.classList.contains('nav-item') || e.target.parentElement.classList.contains('nav-item') || e.target.parentElement.parentElement.classList.contains('nav-item')) {
+    const todoListType = document.querySelector('.todo-list-type');
+    todoListType.innerHTML = e.target.dataset.index;
+    currentPage = e.target.dataset.index;
+    displayTodoList();
+    console.log(currentPage);
+  }
 }
 
 function displayTodoList() {
@@ -207,7 +215,7 @@ function displayTodoList() {
   } else if (currentPage == 'Today') {
     todoListArray.forEach(array => array.forEach((item, index) => { if (item.dueDate == today) displayTodo(item, index) }));
   } else if (currentPage == 'Upcoming') {
-    todoListArrayUpcoming.forEach((item, index) => { if (item.dueDate !== today) displayTodo(item, index) });
+    todoListArray.forEach(array => array.forEach((item, index) => { if (item.dueDate !== today) displayTodo(item, index) }));
   }
 }
 
