@@ -74,7 +74,7 @@ function displayProject(title) {
   const projectTrashIcon = document.createElement('i');
   projectTrashIcon.classList.add('fa-solid');
   projectTrashIcon.classList.add('fa-diagram-project');
-  p.textContent = `${title} - `;
+  p.innerHTML = `${title} - <span data-index="${title}"></span>`;
   const div = document.createElement('div');
   div.classList.add('nav-item')
   div.appendChild(projectTrashIcon);
@@ -239,16 +239,24 @@ function displayTodoList() {
 }
 
 function todoListCounter() {
-  let inboxCounter = -1;
+  let inboxCounter = 0;
   let todayCounter = 0;
   let upcomingCounter = 0;
-  todoListArray.forEach(array => array.forEach(() => inboxCounter++));
+  todoListArray.forEach(array => array.forEach((item) => {
+    if (typeof (item) == 'object') {
+      inboxCounter++
+    }
+  }));
   todoListArray.forEach(array => array.forEach((item) => { if (item.dueDate == today) todayCounter++ }))
   todoListArrayUpcoming.forEach(() => upcomingCounter++);
 
   for (let i = 2; i < todoListArray.length; i++) {
-    let counter = -1;
-    todoListArray[i].forEach(item => counter++);
+    let counter = 0;
+    todoListArray[i].forEach(item => {
+      if (typeof (item) == 'object') {
+        counter++
+      }
+    });
     let project = todoListArray[i][0];
     document.querySelector(`span[data-index="${project}"]`).textContent = counter;
   }
