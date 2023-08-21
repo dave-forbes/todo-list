@@ -8,11 +8,11 @@ const tomorrow = dateFormat(nextDay, 'yyyy-mm-dd');
 const todoListArrayToday = [{ title: "Task for today", description: "something here", priority: "medium", dueDate: today },
 ];
 const todoListArrayUpcoming = [{ title: "Task for tomorrow", description: "something here", priority: "medium", dueDate: tomorrow },
-{ title: "Task for next week", description: "something here", priority: "medium", dueDate: "2023-08-21" }];
+{ title: "Task for next week", description: "something here", priority: "medium", dueDate: "2023-08-28" }];
 
-const project1 = [{ title: 'Study Web Development', description: '', dueDate: '2023-08-18', priority: '', project: 'Project 1' }];
+const project = ['Project', { title: 'Study Web Development', description: '', dueDate: '2023-08-18', priority: '', project: 'Project' }];
 
-const todoListArray = [todoListArrayToday, todoListArrayUpcoming, project1
+const todoListArray = [todoListArrayToday, todoListArrayUpcoming, project
 ];
 
 const addTodoFormButton = document.querySelector('.add-todo-container');
@@ -29,9 +29,6 @@ const todoDescriptionInput = document.querySelector('#todo-description-input');
 const todoDueDateInput = document.querySelector('#todo-due-date-input');
 const todoPriorityInput = document.querySelector('#todo-priority-input');
 const todoList = document.querySelector('.todo-list');
-const inboxButton = document.querySelector('#inbox');
-const todayButton = document.querySelector('#today');
-const upcomingButton = document.querySelector('#upcoming');
 const projectSelect = document.querySelector('#project-select')
 
 let currentPage = 'Inbox';
@@ -59,10 +56,15 @@ addTodoButton.addEventListener('click', addTodo);
 addProjectsButton.addEventListener('click', addProject);
 
 function addProject() {
-  const newProject = new Array();
+  const newProject = [addProjectsInput.value];
   todoListArray.push(newProject);
-  displayProject(addProjectsInput.value);
+  const projectSelect = document.querySelector('#project-select');
+  const option = document.createElement('option');
+  option.value = addProjectsInput.value;
+  option.innerHTML = addProjectsInput.value;
+  projectSelect.appendChild(option);
   console.log(todoListArray);
+  displayProject(addProjectsInput.value);
 }
 
 function displayProject(title) {
@@ -86,8 +88,16 @@ function displayProject(title) {
 
 function addTodo() {
   const newTodo = CreateTodo(todoTitleInput.value, todoDescriptionInput.value, todoDueDateInput.value, todoPriorityInput.value, projectSelect.value);
-  if (newTodo.dueDate == today) todoListArrayToday.push(newTodo);
-  if (newTodo.dueDate !== today) todoListArrayUpcoming.push(newTodo);
+  if (newTodo.dueDate == today && newTodo.hasOwnProperty('project') === false) todoListArrayToday.push(newTodo);
+  if (newTodo.dueDate !== today && newTodo.hasOwnProperty('project') === false) todoListArrayUpcoming.push(newTodo);
+  if (newTodo.hasOwnProperty('project')) {
+    for (let i = 2; i < todoListArray.length; i++) {
+      if (todoListArray[i][0] == newTodo.project) {
+        todoListArray[i].push(newTodo);
+      }
+    }
+  }
+
   toggleTodoForm();
   displayTodoList();
   todoListCounter();
@@ -121,8 +131,9 @@ function displayTodo(todo, index) {
   const container = document.createElement('div');
   container.setAttribute('data-index', index);
 
-  if (todo.dueDate == today) container.classList.add('today');
-  if (todo.dueDate !== today) container.classList.add('upmcoming');
+  if (todo.dueDate == today && todo.hasOwnProperty('project') === false) container.classList.add('today');
+  if (todo.dueDate !== today && todo.hasOwnProperty('project') === false) container.classList.add('upcoming');
+  if (todo.hasOwnProperty('project')) container.classList.add(todo.project);
 
   const todoTitle = document.createElement('div');
   todoTitle.classList.add('todo-title');
@@ -203,6 +214,7 @@ sideBar.addEventListener('click', (e) => switchTodoListType(e));
 function switchTodoListType(e) {
   console.log(e.target.parentElement);
   if (e.target.classList.contains('nav-item') || e.target.parentElement.classList.contains('nav-item') || e.target.parentElement.parentElement.classList.contains('nav-item')) {
+    if (e.target.classList.contains('add-projects-container') || e.target.parentElement.classList.contains('add-projects-container')) return;
     const todoListType = document.querySelector('.todo-list-type');
     todoListType.innerHTML = e.target.dataset.index;
     currentPage = e.target.dataset.index;
@@ -214,18 +226,20 @@ function switchTodoListType(e) {
 function displayTodoList() {
   todoList.innerHTML = '';
   if (currentPage == 'Inbox') {
-    todoListArray.forEach(array => array.forEach((item, index) => displayTodo(item, index)));
+    todoListArray.forEach(array => array.forEach((item, index) => {
+      if (typeof (item) == 'object') displayTodo(item, index);
+    }));
   } else if (currentPage == 'Today') {
     todoListArray.forEach(array => array.forEach((item, index) => { if (item.dueDate == today) displayTodo(item, index) }));
   } else if (currentPage == 'Upcoming') {
-    todoListArray.forEach(array => array.forEach((item, index) => { if (item.dueDate !== today) displayTodo(item, index) }));
+    todoListArray.forEach(array => array.forEach((item, index) => { if (item.dueDate !== today && typeof (item) == 'object') displayTodo(item, index) }));
   } else {
-    todoListArray.forEach(array => array.forEach((item, index) => { if (item.project == currentPage) displayTodo(item, index) }));
+    todoListArray.forEach(array => array.forEach((item, index) => { if (item.project == currentPage && typeof (item) == 'object') displayTodo(item, index) }));
   }
 }
 
 function todoListCounter() {
-  let inboxCounter = 0;
+  let inboxCounter = -1;
   let todayCounter = 0;
   let upcomingCounter = 0;
   todoListArray.forEach(array => array.forEach(() => inboxCounter++));
@@ -233,9 +247,9 @@ function todoListCounter() {
   todoListArrayUpcoming.forEach(() => upcomingCounter++);
 
   for (let i = 2; i < todoListArray.length; i++) {
-    let counter = 0;
+    let counter = -1;
     todoListArray[i].forEach(item => counter++);
-    let project = todoListArray[i][0].project;
+    let project = todoListArray[i][0];
     document.querySelector(`span[data-index="${project}"]`).textContent = counter;
   }
 
@@ -257,19 +271,25 @@ function removeTodo(e) {
       displayTodoList();
       todoListCounter();
       console.log(todoListArray);
-    } else {
+    } else if (e.target.parentElement.parentElement.classList.contains('upcoming')) {
       const index = e.target.parentElement.parentElement.dataset.index;
       todoListArrayUpcoming.splice(index, 1);
       displayTodoList();
       todoListCounter();
       console.log(todoListArray);
+    } else {
+      const project = e.target.parentElement.parentElement.classList[0];
+      const index = e.target.parentElement.parentElement.dataset.index;
+      for (let i = 2; i < todoListArray.length; i++) {
+        if (todoListArray[i][0] == project) {
+          todoListArray[i].splice(index, 1);
+        }
+      }
+      displayTodoList();
+      console.log(todoListArray);
+      todoListCounter();
     }
   }
 }
-
-console.log(todoListArray);
-
-console.log(today);
-
 
 
