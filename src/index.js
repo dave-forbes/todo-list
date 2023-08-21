@@ -205,7 +205,7 @@ function displayTodoList() {
   if (currentPage == 'Inbox') {
     todoListArray.forEach(array => array.forEach((item, index) => displayTodo(item, index)));
   } else if (currentPage == 'Today') {
-    todoListArrayToday.forEach((item, index) => { if (item.dueDate == today) displayTodo(item, index) });
+    todoListArray.forEach(array => array.forEach((item, index) => { if (item.dueDate == today) displayTodo(item, index) }));
   } else if (currentPage == 'Upcoming') {
     todoListArrayUpcoming.forEach((item, index) => { if (item.dueDate !== today) displayTodo(item, index) });
   }
@@ -216,7 +216,7 @@ function todoListCounter() {
   let todayCounter = 0;
   let upcomingCounter = 0;
   todoListArray.forEach(array => array.forEach(() => inboxCounter++));
-  todoListArrayToday.forEach(() => todayCounter++);
+  todoListArray.forEach(array => array.forEach((item) => { if (item.dueDate == today) todayCounter++ }))
   todoListArrayUpcoming.forEach(() => upcomingCounter++);
 
   for (let i = 2; i < todoListArray.length; i++) {
@@ -256,7 +256,7 @@ function removeTodo(e) {
 
 console.log(todoListArray);
 
-
+console.log(today);
 
 
 
