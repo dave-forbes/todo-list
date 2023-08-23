@@ -234,6 +234,13 @@ label {
   border-radius: 10px;
 }
 
+@media (max-width: 400px) {
+  .add-todo-form {
+    display: flex;
+    flex-direction: column;
+  }
+}
+
 #todo-title-input {
   font-size: 1.2rem;
 }
