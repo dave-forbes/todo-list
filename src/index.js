@@ -57,7 +57,7 @@ function addTodo() {
 }
 
 function addProject() {
-  const newProject = [addProjectsInput.value];
+  const newProject = [ui.addProjectsInput.value];
   todoListArray.push(newProject);
   console.log(todoListArray);
 }
@@ -123,48 +123,11 @@ function removeTodo(e) {
   }
 }
 
-document.addEventListener('click', (e) => completeTodo(e));
-
-function completeTodo(e) {
-  if (e.target.classList.contains('check-box')) {
-    if (e.target.parentElement.parentElement.parentElement.classList.contains('today')) {
-      e.target.parentElement.parentElement.parentElement.classList.add('line-through');
-      setTimeout(() => {
-        const index = e.target.parentElement.parentElement.parentElement.dataset.index;
-        todoListArrayToday[index].completed = true;
-        const completedTodo = todoListArrayToday.splice(index, 1);
-        todoListCompleted.push(completedTodo[0]);
-        displayTodoList();
-        todoListCounter();
-      }, 1000);
-    } else if (e.target.parentElement.parentElement.parentElement.classList.contains('upcoming')) {
-      e.target.parentElement.parentElement.parentElement.classList.add('line-through');
-      setTimeout(() => {
-        const index = e.target.parentElement.parentElement.parentElement.dataset.index;
-        todoListArrayUpcoming[index].completed = true;
-        const completedTodo = todoListArrayUpcoming.splice(index, 1);
-        todoListCompleted.push(completedTodo[0]);
-        displayTodoList();
-        todoListCounter();
-      }, 1000);
-    } else {
-      const project = e.target.parentElement.parentElement.parentElement.classList[0];
-      console.log(e.target.parentElement.parentElement.parentElement);
-      e.target.parentElement.parentElement.parentElement.classList.add('line-through');
-      for (let i = 2; i < todoListArray.length; i++) {
-        if (todoListArray[i][0] == project) {
-          setTimeout(() => {
-            const index = e.target.parentElement.parentElement.parentElement.dataset.index;
-            todoListArray[i][index].completed = true;
-            const completedTodo = todoListArray[i].splice(index, 1);
-            todoListCompleted.push(completedTodo[0]);
-            displayTodoList();
-            todoListCounter();
-          }, 1000);
-        }
-      }
-    }
-  }
+function completeTodo(array, index) {
+  todoListArray[array][index].completed = true;
+  const completedTodo = todoListArray[array].splice(index, 1);
+  todoListCompleted.push(completedTodo[0]);
+  console.log(todoListArray);
 }
 
 function UIFunctions() {
@@ -343,8 +306,6 @@ function UIFunctions() {
 
   const sideBar = document.querySelector('.side-bar');
 
-
-
   function switchTodoListType(e) {
     console.log(e.target.parentElement);
     if (e.target.classList.contains('nav-item') || e.target.parentElement.classList.contains('nav-item') || e.target.parentElement.parentElement.classList.contains('nav-item')) {
@@ -354,6 +315,31 @@ function UIFunctions() {
       currentPage = e.target.dataset.index;
       displayTodoList();
       console.log(currentPage);
+    }
+  }
+
+  function checkCompleteTodo(e) {
+    if (e.target.classList.contains('check-box')) {
+      const node = e.target.parentElement.parentElement.parentElement;
+      const index = node.dataset.index;
+      console.log({ node, index })
+      node.classList.add('line-through');
+      if (node.classList.contains('today')) {
+        completeTodo(0, index);
+      } else if (node.classList.contains('upcoming')) {
+        completeTodo(1, index);
+      } else {
+        const project = node.classList[0];
+        for (let i = 2; i < todoListArray.length; i++) {
+          if (todoListArray[i][0] == project) {
+            completeTodo(i, index)
+          }
+        }
+      }
+      setTimeout(() => {
+        ui.displayTodoList();
+        ui.todoListCounter();
+      }, 1000);
     }
   }
 
@@ -369,11 +355,12 @@ function UIFunctions() {
       todoListCounter();
     });
     addProjectsButton.addEventListener('click', () => {
-      addProject
+      addProject();
       displayProject(addProjectsInput.value);
       toggleProjectForm();
     });
     sideBar.addEventListener('click', (e) => switchTodoListType(e));
+    document.addEventListener('click', checkCompleteTodo);
   }
 
   return {
@@ -384,6 +371,7 @@ function UIFunctions() {
     todoDueDateInput,
     todoPriorityInput,
     projectSelect,
+    addProjectsInput,
     displayTodoList,
     todoListCounter
   }
