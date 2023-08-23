@@ -106,10 +106,17 @@ export function UIFunctions() {
     todoTitleWrapper.appendChild(todoCheckBox);
     todoTitleWrapper.appendChild(todoTitleText);
     todoTitle.appendChild(todoTitleWrapper);
+    const todoTitleIconWrapper = document.createElement('div');
+    todoTitleIconWrapper.style.cssText = 'display: flex; gap: 2rem;'
+    const todoEditIcon = document.createElement('i');
+    todoEditIcon.classList.add('fa-solid');
+    todoEditIcon.classList.add('fa-pen-to-square');
     const todoTrashIcon = document.createElement('i');
     todoTrashIcon.classList.add('fa-solid');
     todoTrashIcon.classList.add('fa-trash');
-    todoTitle.appendChild(todoTrashIcon);
+    todoTitleIconWrapper.appendChild(todoEditIcon);
+    todoTitleIconWrapper.appendChild(todoTrashIcon);
+    todoTitle.appendChild(todoTitleIconWrapper);
 
     const todoDescription = document.createElement('p');
     todoDescription.textContent = todo.description;
