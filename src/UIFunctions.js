@@ -189,6 +189,7 @@ export function UIFunctions() {
       todoListType.innerHTML = e.target.dataset.index;
       currentPage = e.target.dataset.index;
       displayTodoList();
+      toggleSideBar();
       console.log(currentPage);
     }
   }
@@ -240,6 +241,12 @@ export function UIFunctions() {
     }
   }
 
+  function toggleSideBar() {
+    sideBar.classList.toggle('side-bar-hide');
+  }
+
+  const burgerMenu = document.querySelectorAll('.burger-menu');
+
   function eventListeners() {
     addTodoFormButton.addEventListener('click', toggleTodoForm);
     cancelTodoForm.addEventListener('click', toggleTodoForm);
@@ -263,6 +270,7 @@ export function UIFunctions() {
     sideBar.addEventListener('click', (e) => switchTodoListType(e));
     document.addEventListener('click', checkCompleteTodo);
     document.addEventListener('click', clickRemoveTodo);
+    burgerMenu.forEach(menu => menu.addEventListener('click', toggleSideBar));
   }
 
   function displayNumberOfTodos(listType, counter) {
