@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+  <script src="index.bundle.js" defer></script>
+  <script src="https://kit.fontawesome.com/1defe17cdd.js" crossorigin="anonymous"></script>
+  <title>todo-list</title>
+</head>
+
+<body>
+  <div class="top-banner">
+    <div class="burger-menu"><i class="fa-solid fa-bars fa-2xl"></i></div>
+    <h1 class="top-banner-title">Todo List</h1>
+  </div>
+
+  <div class="side-bar">
+    <div class="burger-menu"><i class="fa-solid fa-bars fa-2xl"></i></div>
+    <h1 class="side-bar-title">Todo List</h1>
+    <ul class="todo-nav">
+      <div data-index="Inbox" id="inbox" class="nav-item">
+        <i data-index="Inbox" class="fa-solid fa-inbox"></i>
+        <li data-index="Inbox">Inbox - <span data-index="Inbox"></span></li>
+      </div>
+      <div data-index="Today" id="today" class="nav-item">
+        <i data-index="Today" class="fa-solid fa-calendar-day"></i>
+        <li data-index="Today">Today - <span data-index="Today"></span></li>
+      </div>
+      <div data-index="Upcoming" id="upcoming" class="nav-item">
+        <i data-index="Upcoming" class="fa-solid fa-calendar-week"></i>
+        <li data-index="Upcoming">Upcoming - <span data-index="Upcoming"></span></li>
+      </div>
+      <div data-index="Completed" id="completed" class="nav-item">
+        <i data-index="Completed" class="fa-solid fa-square-check"></i>
+        <li data-index="Completed">Completed - <span data-index="Completed"></span></li>
+      </div>
+    </ul>
+    <h2 class="projects-title">Projects</h2>
+    <ul class="projects-nav">
+      <div id=projects>
+        <div data-index="Project" class="nav-item project">
+          <i data-index="Project" class="fa-solid fa-diagram-project"></i>
+          <p data-index="Project">Project - <span data-index="Project"></span></p>
+        </div>
+      </div>
+      <div class="add-projects-container nav-item">
+        <button class="add-project-form-button">+</button>
+        <span>Add project</span>
+      </div>
+      <div class="add-projects-form hide">
+        <input id="add-projects-input" placeholder="Title" type="text">
+        <div class="add-project-buttons">
+          <button id="add-projects-button">Add project</button>
+          <button id="cancel-project-form-button">Cancel</button>
+        </div>
+      </div>
+    </ul>
+  </div>
+  <div class="main">
+    <div class="todos">
+      <h3 class="todo-list-type">Inbox<span class="date"></span></h3>
+      <div class="todo-list"></div>
+      <div class="add-todo-container">
+        <button class="add-todo-form-button">+</button>
+        <span>Add todo</span>
+      </div>
+      <div class="add-todo-form hide">
+        <label>Title</label>
+        <input id="todo-title-input" type="text">
+        <label>Description</label>
+        <input id="todo-description-input" type="text">
+        <label for="todo-due-date-input">Due Date</label>
+        <input type="date" name="date" id="todo-due-date-input">
+        <label>Priority</label>
+        <select id="todo-priority-input">
+          <option value="low">Low</option>
+          <option value="medium">Medium</option>
+          <option value="high">High</option>
+        </select>
+        <label>Project</label>
+        <div class="flex">
+          <select id="project-select">
+            <option value="Inbox">Inbox</option>
+            <option value="Project">Project</option>
+          </select>
+          <div id="button-wrapper" class="flex">
+            <button id="add-todo-button">Add Todo</button>
+            <button id="cancel-form">Cancel</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+</body>
+
+</html>
