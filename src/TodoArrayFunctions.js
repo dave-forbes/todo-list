@@ -96,12 +96,17 @@ export function TodoArrayFunctions() {
     console.log(todoListArray);
   }
 
+  function findTodo(array, index) {
+    return todoListArray[array][index];
+  }
+
   return {
     addTodo,
     addProject,
     todoListCounter,
     removeTodo,
     completeTodo,
+    findTodo,
     todoListArray,
     todoListCompleted,
     today,
