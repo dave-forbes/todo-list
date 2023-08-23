@@ -33,7 +33,6 @@ export function TodoArrayFunctions() {
     return todo;
   }
 
-
   function addTodo(title, description, dueDate, priority, project) {
     const newTodo = CreateTodo(title, description, dueDate, priority, project, false);
     if (newTodo.dueDate == today && newTodo.project == 'Inbox') todoListArrayToday.push(newTodo);
@@ -96,6 +95,7 @@ export function TodoArrayFunctions() {
     todoListCompleted.push(completedTodo[0]);
     console.log(todoListArray);
   }
+
   return {
     addTodo,
     addProject,
