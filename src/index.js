@@ -5,10 +5,10 @@ const nextDay = new Date(now);
 nextDay.setDate(now.getDate() + 1);
 const tomorrow = dateFormat(nextDay, 'yyyy-mm-dd');
 
-const todoListArrayToday = [{ title: "Task for today", description: "something here", priority: "medium", dueDate: today, completed: false },
+const todoListArrayToday = [{ title: "Task for today", description: "something here", priority: "medium", dueDate: today, project: 'Inbox', completed: false },
 ];
-const todoListArrayUpcoming = [{ title: "Task for tomorrow", description: "something here", priority: "medium", dueDate: tomorrow, completed: false },
-{ title: "Task for next week", description: "something here", priority: "medium", dueDate: "2023-08-28", completed: false }];
+const todoListArrayUpcoming = [{ title: "Task for tomorrow", description: "something here", priority: "medium", dueDate: tomorrow, project: 'Inbox', completed: false },
+{ title: "Task for next week", description: "something here", priority: "medium", dueDate: "2023-08-28", project: 'Inbox', completed: false }];
 
 const todoListCompleted = [];
 
@@ -86,33 +86,30 @@ function todoListCounter() {
   document.querySelector('span[data-index="Completed"]').textContent = completedCounter;
 }
 
-document.addEventListener('click', (e) => removeTodo(e));
+document.addEventListener('click', (e) => {
+  if (e.target.classList.contains('fa-trash')) {
+    removeTodo(e);
+    ui.displayTodoList();
+    ui.todoListCounter();
+    console.log(todoListArray);
+  }
+});
 
 function removeTodo(e) {
-  if (e.target.classList.contains('fa-trash')) {
-    if (e.target.parentElement.parentElement.classList.contains('today')) {
-      const index = e.target.parentElement.parentElement.dataset.index;
-      todoListArrayToday.splice(index, 1);
-      displayTodoList();
-      todoListCounter();
-      console.log(todoListArray);
-    } else if (e.target.parentElement.parentElement.classList.contains('upcoming')) {
-      const index = e.target.parentElement.parentElement.dataset.index;
-      todoListArrayUpcoming.splice(index, 1);
-      displayTodoList();
-      todoListCounter();
-      console.log(todoListArray);
-    } else {
-      const project = e.target.parentElement.parentElement.classList[0];
-      const index = e.target.parentElement.parentElement.dataset.index;
-      for (let i = 2; i < todoListArray.length; i++) {
-        if (todoListArray[i][0] == project) {
-          todoListArray[i].splice(index, 1);
-        }
+  if (e.target.parentElement.parentElement.classList.contains('today')) {
+    const index = e.target.parentElement.parentElement.dataset.index;
+    todoListArrayToday.splice(index, 1);
+    console.log(todoListArray);
+  } else if (e.target.parentElement.parentElement.classList.contains('upcoming')) {
+    const index = e.target.parentElement.parentElement.dataset.index;
+    todoListArrayUpcoming.splice(index, 1);
+  } else {
+    const project = e.target.parentElement.parentElement.classList[0];
+    const index = e.target.parentElement.parentElement.dataset.index;
+    for (let i = 2; i < todoListArray.length; i++) {
+      if (todoListArray[i][0] == project) {
+        todoListArray[i].splice(index, 1);
       }
-      displayTodoList();
-      console.log(todoListArray);
-      todoListCounter();
     }
   }
 }
@@ -262,7 +259,7 @@ function UIFunctions() {
     flexDiv.style.cssText = 'display: flex; align-items: center; gap: 2rem;'
     flexDiv.appendChild(priorityContainer);
     flexDiv.appendChild(dueDateContainer);
-    if (todo.hasOwnProperty('project')) {
+    if (todo.project !== 'Inbox') {
       const projectContainer = document.createElement('div');
       projectContainer.style.cssText = 'font-size: 0.9rem; padding: 0.5rem; background-color: var(--color3); border-radius: 10px; display: grid; place-items: center;'
       projectContainer.innerHTML = todo.project;
