@@ -36,17 +36,11 @@ const CreateTodo = function (title, description, dueDate, priority, project, com
 }
 
 
-function addTodo() {
-  const newTodo = CreateTodo(
-    ui.todoTitleInput.value,
-    ui.todoDescriptionInput.value,
-    ui.todoDueDateInput.value,
-    ui.todoPriorityInput.value,
-    ui.projectSelect.value,
-    false);
-  if (newTodo.dueDate == today && newTodo.hasOwnProperty('project') === false) todoListArrayToday.push(newTodo);
-  if (newTodo.dueDate !== today && newTodo.hasOwnProperty('project') === false) todoListArrayUpcoming.push(newTodo);
-  if (newTodo.hasOwnProperty('project')) {
+function addTodo(title, description, dueDate, priority, project) {
+  const newTodo = CreateTodo(title, description, dueDate, priority, project, false);
+  if (newTodo.dueDate == today && newTodo.project == 'Inbox') todoListArrayToday.push(newTodo);
+  if (newTodo.dueDate !== today && newTodo.project == 'Inbox') todoListArrayUpcoming.push(newTodo);
+  if (newTodo.dueDate !== today && newTodo.project !== 'Inbox') {
     for (let i = 2; i < todoListArray.length; i++) {
       if (todoListArray[i][0] == newTodo.project) {
         todoListArray[i].push(newTodo);
@@ -215,9 +209,9 @@ function UIFunctions() {
     const container = document.createElement('div');
     container.setAttribute('data-index', index);
 
-    if (todo.dueDate == today && todo.hasOwnProperty('project') === false) container.classList.add('today');
-    if (todo.dueDate !== today && todo.hasOwnProperty('project') === false) container.classList.add('upcoming');
-    if (todo.hasOwnProperty('project')) container.classList.add(todo.project);
+    if (todo.dueDate == today && todo.project == 'Inbox') container.classList.add('today');
+    if (todo.dueDate !== today && todo.project == 'Inbox') container.classList.add('upcoming');
+    if (todo.dueDate !== today && todo.project !== 'Inbox') container.classList.add(todo.project);
 
     const todoTitle = document.createElement('div');
     todoTitle.classList.add('todo-title');
@@ -349,7 +343,11 @@ function UIFunctions() {
     addProjectsFormButton.addEventListener('click', toggleProjectForm);
     cancelProjectsButton.addEventListener('click', toggleProjectForm);
     addTodoButton.addEventListener('click', () => {
-      addTodo();
+      addTodo(todoTitleInput.value,
+        todoDescriptionInput.value,
+        todoDueDateInput.value,
+        todoPriorityInput.value,
+        projectSelect.value);
       toggleTodoForm();
       displayTodoList();
       todoListCounter();
@@ -365,12 +363,6 @@ function UIFunctions() {
 
   return {
     eventListeners,
-    displayTodo,
-    todoTitleInput,
-    todoDescriptionInput,
-    todoDueDateInput,
-    todoPriorityInput,
-    projectSelect,
     addProjectsInput,
     displayTodoList,
     todoListCounter
