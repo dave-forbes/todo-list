@@ -22,7 +22,7 @@ const ui = UIFunctions();
 
 ui.eventListeners();
 ui.displayTodoList();
-ui.todoListCounter();
+todoListCounter();
 
 const CreateTodo = function (title, description, dueDate, priority, project, completed) {
   const todo = {};
@@ -50,8 +50,8 @@ function addTodo(title, description, dueDate, priority, project) {
   console.log(todoListArray);
 }
 
-function addProject() {
-  const newProject = [ui.addProjectsInput.value];
+function addProject(value) {
+  const newProject = [value];
   todoListArray.push(newProject);
   console.log(todoListArray);
 }
@@ -77,13 +77,13 @@ function todoListCounter() {
     let counter = 0;
     todoListArray[i].forEach(item => { if (typeof (item) == 'object') { counter++ } });
     let project = todoListArray[i][0];
-    document.querySelector(`span[data-index="${project}"]`).textContent = counter;
+    ui.displayNumberOfTodos(project, counter);
   }
 
-  document.querySelector('span[data-index="Inbox"]').textContent = inboxCounter;
-  document.querySelector('span[data-index="Today"]').textContent = todayCounter;
-  document.querySelector('span[data-index="Upcoming"]').textContent = upcomingCounter;
-  document.querySelector('span[data-index="Completed"]').textContent = completedCounter;
+  ui.displayNumberOfTodos('Inbox', inboxCounter);
+  ui.displayNumberOfTodos('Today', todayCounter);
+  ui.displayNumberOfTodos('Upcoming', upcomingCounter);
+  ui.displayNumberOfTodos('Completed', completedCounter);
 }
 
 function removeTodo(array, index) {
@@ -304,8 +304,8 @@ function UIFunctions() {
         }
       }
       setTimeout(() => {
-        ui.displayTodoList();
-        ui.todoListCounter();
+        displayTodoList();
+        todoListCounter();
       }, 1000);
     }
   }
@@ -348,7 +348,7 @@ function UIFunctions() {
       todoListCounter();
     });
     addProjectsButton.addEventListener('click', () => {
-      addProject();
+      addProject(addProjectsInput.value);
       displayProject(addProjectsInput.value);
       toggleProjectForm();
     });
@@ -357,11 +357,14 @@ function UIFunctions() {
     document.addEventListener('click', clickRemoveTodo);
   }
 
+  function displayNumberOfTodos(listType, counter) {
+    document.querySelector(`span[data-index="${listType}"]`).textContent = counter;
+  }
+
   return {
     eventListeners,
-    addProjectsInput,
     displayTodoList,
-    todoListCounter
+    displayNumberOfTodos
   }
 }
 
