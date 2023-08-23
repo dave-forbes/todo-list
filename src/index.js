@@ -86,32 +86,8 @@ function todoListCounter() {
   document.querySelector('span[data-index="Completed"]').textContent = completedCounter;
 }
 
-document.addEventListener('click', (e) => {
-  if (e.target.classList.contains('fa-trash')) {
-    removeTodo(e);
-    ui.displayTodoList();
-    ui.todoListCounter();
-    console.log(todoListArray);
-  }
-});
-
-function removeTodo(e) {
-  if (e.target.parentElement.parentElement.classList.contains('today')) {
-    const index = e.target.parentElement.parentElement.dataset.index;
-    todoListArrayToday.splice(index, 1);
-    console.log(todoListArray);
-  } else if (e.target.parentElement.parentElement.classList.contains('upcoming')) {
-    const index = e.target.parentElement.parentElement.dataset.index;
-    todoListArrayUpcoming.splice(index, 1);
-  } else {
-    const project = e.target.parentElement.parentElement.classList[0];
-    const index = e.target.parentElement.parentElement.dataset.index;
-    for (let i = 2; i < todoListArray.length; i++) {
-      if (todoListArray[i][0] == project) {
-        todoListArray[i].splice(index, 1);
-      }
-    }
-  }
+function removeTodo(array, index) {
+  todoListArray[array].splice(index, 1);
 }
 
 function completeTodo(array, index) {
@@ -334,6 +310,28 @@ function UIFunctions() {
     }
   }
 
+  function clickRemoveTodo(e) {
+    if (e.target.classList.contains('fa-trash')) {
+      const node = e.target.parentElement.parentElement;
+      const index = node.dataset.index;
+      if (node.classList.contains('today')) {
+        removeTodo(0, index);
+      } else if (node.classList.contains('upcoming')) {
+        removeTodo(1, index);
+      } else {
+        const project = node.classList[0];
+        for (let i = 2; i < todoListArray.length; i++) {
+          if (todoListArray[i][0] == project) {
+            removeTodo(i, index);
+          }
+        }
+      }
+      displayTodoList();
+      todoListCounter();
+      console.log(todoListArray);
+    }
+  }
+
   function eventListeners() {
     addTodoFormButton.addEventListener('click', toggleTodoForm);
     cancelTodoForm.addEventListener('click', toggleTodoForm);
@@ -356,6 +354,7 @@ function UIFunctions() {
     });
     sideBar.addEventListener('click', (e) => switchTodoListType(e));
     document.addEventListener('click', checkCompleteTodo);
+    document.addEventListener('click', clickRemoveTodo);
   }
 
   return {
