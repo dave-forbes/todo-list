@@ -59,17 +59,24 @@ export function TodoArrayFunctions() {
     let todayCounter = 0;
     let upcomingCounter = 0;
     let completedCounter = 0;
+
     todoListArray.forEach(array => array.forEach((item) => {
       if (typeof (item) == 'object' && item.completed == false) { inboxCounter++ }
     }));
+    ui.displayNumberOfTodos('Inbox', inboxCounter);
+
     todoListArray.forEach(array => array.forEach((item) => {
       if (item.dueDate == today && typeof (item) == 'object' && item.completed == false) todayCounter++
     }));
+    ui.displayNumberOfTodos('Today', todayCounter);
+
     todoListArray.forEach(array => array.forEach((item) => {
       if (item.dueDate !== today && typeof (item) == 'object' && item.completed == false) upcomingCounter++
     }));
+    ui.displayNumberOfTodos('Upcoming', upcomingCounter);
 
     todoListCompleted.forEach(() => completedCounter++);
+    ui.displayNumberOfTodos('Completed', completedCounter);
 
     for (let i = 3; i < todoListArray.length; i++) {
       let counter = 0;
@@ -77,11 +84,6 @@ export function TodoArrayFunctions() {
       let project = todoListArray[i][0];
       ui.displayNumberOfTodos(project, counter);
     }
-
-    ui.displayNumberOfTodos('Inbox', inboxCounter);
-    ui.displayNumberOfTodos('Today', todayCounter);
-    ui.displayNumberOfTodos('Upcoming', upcomingCounter);
-    ui.displayNumberOfTodos('Completed', completedCounter);
   }
 
   function removeTodo(array, index) {
