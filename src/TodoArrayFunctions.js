@@ -14,11 +14,11 @@ export function TodoArrayFunctions() {
   const todoListArrayToday = [{ title: "Task for today", description: "something here", priority: "medium", dueDate: today, project: 'Inbox', completed: false },
   ];
   const todoListArrayUpcoming = [{ title: "Task for tomorrow", description: "something here", priority: "medium", dueDate: tomorrow, project: 'Inbox', completed: false },
-  { title: "Task for next week", description: "something here", priority: "medium", dueDate: "2023-08-28", project: 'Inbox', completed: false }];
+  { title: "Task for next week", description: "something here", priority: "medium", dueDate: "2023-09-25", project: 'Inbox', completed: false }];
 
   const todoListCompleted = [];
 
-  const project = ['Project', { title: 'Study Web Development', description: '', dueDate: '2023-08-25', priority: '', project: 'Project', completed: false }];
+  const project = ['Project', { title: 'Study Web Development', description: '', dueDate: '2023-09-30', priority: '', project: 'Project', completed: false }];
 
   const todoListArray = [todoListArrayToday, todoListArrayUpcoming, todoListCompleted, project];
 
@@ -37,7 +37,7 @@ export function TodoArrayFunctions() {
     const newTodo = CreateTodo(title, description, dueDate, priority, project, false);
     if (newTodo.dueDate == today && newTodo.project == 'Inbox') todoListArrayToday.push(newTodo);
     if (newTodo.dueDate !== today && newTodo.project == 'Inbox') todoListArrayUpcoming.push(newTodo);
-    if (newTodo.dueDate !== today && newTodo.project !== 'Inbox') {
+    if (newTodo.project !== 'Inbox') {
       for (let i = 2; i < todoListArray.length; i++) {
         if (todoListArray[i][0] == newTodo.project) {
           todoListArray[i].push(newTodo);
