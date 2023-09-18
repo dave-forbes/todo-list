@@ -95,7 +95,7 @@ export function UIFunctions() {
 
     if (todo.dueDate == todoArrayFunctions.today && todo.project == 'Inbox') container.classList.add('today');
     if (todo.dueDate !== todoArrayFunctions.today && todo.project == 'Inbox') container.classList.add('upcoming');
-    if (todo.dueDate !== todoArrayFunctions.today && todo.project !== 'Inbox') container.classList.add(todo.project);
+    if (todo.project !== 'Inbox') container.classList.add(todo.project);
 
     const todoTitle = document.createElement('div');
     todoTitle.classList.add('todo-title');
