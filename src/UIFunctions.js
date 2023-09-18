@@ -317,6 +317,13 @@ export function UIFunctions() {
 
   const burgerMenu = document.querySelectorAll('.burger-menu');
 
+  function clearStorage() {
+    localStorage.clear();
+    location.reload();
+  }
+
+  const clearStorageButton = document.querySelector('#clear-storage-button');
+
   function eventListeners() {
     addTodoFormButton.addEventListener('click', () => toggleTodoForm('Add Todo'));
     cancelTodoForm.addEventListener('click', toggleTodoForm);
@@ -346,6 +353,7 @@ export function UIFunctions() {
     document.addEventListener('click', clickRemoveTodo);
     document.addEventListener('click', toggleEditTodoForm);
     burgerMenu.forEach(menu => menu.addEventListener('click', toggleSideBar));
+    clearStorageButton.addEventListener('click', clearStorage);
   }
 
   function displayNumberOfTodos(listType, counter) {
