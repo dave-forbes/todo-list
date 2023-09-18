@@ -11,16 +11,42 @@ export function TodoArrayFunctions() {
   nextDay.setDate(now.getDate() + 1);
   const tomorrow = dateFormat(nextDay, 'yyyy-mm-dd');
 
-  const todoListArrayToday = [{ title: "Task for today", description: "something here", priority: "medium", dueDate: today, project: 'Inbox', completed: false },
-  ];
-  const todoListArrayUpcoming = [{ title: "Task for tomorrow", description: "something here", priority: "medium", dueDate: tomorrow, project: 'Inbox', completed: false },
-  { title: "Task for next week", description: "something here", priority: "medium", dueDate: "2023-09-25", project: 'Inbox', completed: false }];
+  let todoListArrayToday = [];
 
-  const todoListCompleted = [];
+  let todoListArrayUpcoming = [];
 
-  const project = ['Project', { title: 'Study Web Development', description: '', dueDate: '2023-09-30', priority: '', project: 'Project', completed: false }];
+  let todoListCompleted = [];
+
+  let project = [];
 
   const todoListArray = [todoListArrayToday, todoListArrayUpcoming, todoListCompleted, project];
+
+  if (!localStorage.getItem("todoListArrayToday")) {
+    loadExampleTodos();
+  } else {
+    JSON.parse(localStorage.getItem("todoListArrayToday")).forEach(object => todoListArrayToday.push(object));
+    JSON.parse(localStorage.getItem("todoListArrayUpcoming")).forEach(object => todoListArrayUpcoming.push(object));
+    JSON.parse(localStorage.getItem("todoListCompleted")).forEach(object => todoListCompleted.push(object));
+    console.log(todoListArray);
+    // project.push(localStorage.getItem("project"));
+  }
+
+  function updateLocalStorage() {
+    localStorage.setItem("todoListArrayToday", JSON.stringify(todoListArrayToday));
+    localStorage.setItem("todoListArrayUpcoming", JSON.stringify(todoListArrayUpcoming));
+    localStorage.setItem("todoListCompleted", JSON.stringify(todoListCompleted));
+  }
+
+  function loadExampleTodos() {
+    todoListArrayToday.push({ title: "Task for today", description: "something here", priority: "medium", dueDate: today, project: 'Inbox', completed: false });
+
+    todoListArrayUpcoming.push({ title: "Task for tomorrow", description: "something here", priority: "medium", dueDate: tomorrow, project: 'Inbox', completed: false });
+
+    todoListArrayUpcoming.push({ title: "Task for next week", description: "something here", priority: "medium", dueDate: "2023-09-25", project: 'Inbox', completed: false });
+
+    project.push('Project');
+    project.push({ title: 'Study Web Development', description: '', dueDate: '2023-09-30', priority: '', project: 'Project', completed: false });
+  }
 
   const CreateTodo = function (title, description, dueDate, priority, project, completed) {
     const todo = {};
@@ -45,6 +71,7 @@ export function TodoArrayFunctions() {
       }
     }
     console.log(todoListArray);
+    updateLocalStorage()
   }
 
   function addProject(value) {
@@ -112,6 +139,7 @@ export function TodoArrayFunctions() {
     today,
     tomorrow,
     nextDay,
-    now
+    now,
+    loadExampleTodos
   }
 }
