@@ -11,41 +11,33 @@ export function TodoArrayFunctions() {
   nextDay.setDate(now.getDate() + 1);
   const tomorrow = dateFormat(nextDay, 'yyyy-mm-dd');
 
-  let todoListArrayToday = [];
+  let todoListArrayToday;
+  let todoListArrayUpcoming;
+  let todoListCompleted;
+  let project;
 
-  let todoListArrayUpcoming = [];
-
-  let todoListCompleted = [];
-
-  let project = [];
+  if (localStorage.getItem("todoListArrayToday")) {
+    todoListArrayToday = JSON.parse(localStorage.getItem("todoListArrayToday"));
+    todoListArrayUpcoming = JSON.parse(localStorage.getItem("todoListArrayUpcoming"));
+    todoListCompleted = JSON.parse(localStorage.getItem("todoListCompleted"))
+    project = JSON.parse(localStorage.getItem("Project"));
+  } else {
+    todoListArrayToday = [{ title: "Task for today", description: "something here", priority: "medium", dueDate: today, project: 'Inbox', completed: false }];
+    todoListArrayUpcoming = [{ title: "Task for tomorrow", description: "something here", priority: "medium", dueDate: tomorrow, project: 'Inbox', completed: false }, { title: "Task for next week", description: "something here", priority: "medium", dueDate: "2023-09-25", project: 'Inbox', completed: false }];
+    todoListCompleted = [];
+    project = ['Project', { title: 'Study Web Development', description: '', dueDate: '2023-09-30', priority: '', project: 'Project', completed: false }];
+  }
 
   const todoListArray = [todoListArrayToday, todoListArrayUpcoming, todoListCompleted, project];
-
-  if (!localStorage.getItem("todoListArrayToday")) {
-    loadExampleTodos();
-  } else {
-    JSON.parse(localStorage.getItem("todoListArrayToday")).forEach(object => todoListArrayToday.push(object));
-    JSON.parse(localStorage.getItem("todoListArrayUpcoming")).forEach(object => todoListArrayUpcoming.push(object));
-    JSON.parse(localStorage.getItem("todoListCompleted")).forEach(object => todoListCompleted.push(object));
-    console.log(todoListArray);
-    // project.push(localStorage.getItem("project"));
-  }
 
   function updateLocalStorage() {
     localStorage.setItem("todoListArrayToday", JSON.stringify(todoListArrayToday));
     localStorage.setItem("todoListArrayUpcoming", JSON.stringify(todoListArrayUpcoming));
     localStorage.setItem("todoListCompleted", JSON.stringify(todoListCompleted));
-  }
 
-  function loadExampleTodos() {
-    todoListArrayToday.push({ title: "Task for today", description: "something here", priority: "medium", dueDate: today, project: 'Inbox', completed: false });
-
-    todoListArrayUpcoming.push({ title: "Task for tomorrow", description: "something here", priority: "medium", dueDate: tomorrow, project: 'Inbox', completed: false });
-
-    todoListArrayUpcoming.push({ title: "Task for next week", description: "something here", priority: "medium", dueDate: "2023-09-25", project: 'Inbox', completed: false });
-
-    project.push('Project');
-    project.push({ title: 'Study Web Development', description: '', dueDate: '2023-09-30', priority: '', project: 'Project', completed: false });
+    for (let i = 3; i < todoListArray.length; i++) {
+      localStorage.setItem(todoListArray[i][0], JSON.stringify(todoListArray[i]));
+    }
   }
 
   const CreateTodo = function (title, description, dueDate, priority, project, completed) {
@@ -114,6 +106,7 @@ export function TodoArrayFunctions() {
 
   function removeTodo(array, index) {
     todoListArray[array].splice(index, 1);
+    updateLocalStorage()
   }
 
   function completeTodo(array, index) {
@@ -121,6 +114,7 @@ export function TodoArrayFunctions() {
     const completedTodo = todoListArray[array].splice(index, 1);
     todoListCompleted.push(completedTodo[0]);
     console.log(todoListArray);
+    updateLocalStorage()
   }
 
   function findTodo(array, index) {
@@ -140,6 +134,5 @@ export function TodoArrayFunctions() {
     tomorrow,
     nextDay,
     now,
-    loadExampleTodos
   }
 }
