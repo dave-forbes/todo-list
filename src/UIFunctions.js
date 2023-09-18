@@ -12,6 +12,7 @@ export function UIFunctions() {
   const addTodoForm = document.querySelector('.add-todo-form');
 
   const toggleTodoForm = (text) => {
+    if (todoToEditNode) todoToEditNode.classList.toggle('hide');
     addTodoForm.classList.toggle('hide');
     addTodoFormButton.classList.toggle('hide');
     const addTodoButton = document.querySelector('#add-todo-button');
@@ -230,8 +231,9 @@ export function UIFunctions() {
 
   function clickRemoveTodo(e) {
     if (e.target.classList.contains('fa-trash')) {
-      const node = e.target.parentElement.parentElement;
+      const node = e.target.parentElement.parentElement.parentElement;
       const index = node.dataset.index;
+      console.log({ node, index });
       if (node.classList.contains('today')) {
         todoArrayFunctions.removeTodo(0, index);
       } else if (node.classList.contains('upcoming')) {
@@ -255,25 +257,33 @@ export function UIFunctions() {
   }
 
   let todoToEdit;
+  let todoToEditArray;
+  let todoToEditIndex;
+  let todoToEditNode;
 
   function toggleEditTodoForm(e) {
     if (e.target.classList.contains('fa-pen-to-square')) {
       toggleTodoForm('Edit Todo');
       const node = e.target.parentElement.parentElement.parentElement;
-      node.style.display = 'none';
+      node.classList.toggle('hide');
       const index = node.dataset.index;
+      todoToEditIndex = index;
+      console.log(todoToEditIndex);
+      todoToEditNode = node;
       if (node.classList.contains('today')) {
         todoToEdit = todoArrayFunctions.findTodo(0, index);
         todoTitleInput.value = todoToEdit.title;
         todoDescriptionInput.value = todoToEdit.description;
         todoDueDateInput.value = todoToEdit.dueDate;
         todoPriorityInput.value = todoToEdit.priority;
+        todoToEditArray = 0;
       } else if (node.classList.contains('upcoming')) {
         todoToEdit = todoArrayFunctions.findTodo(1, index);
         todoTitleInput.value = todoToEdit.title;
         todoDescriptionInput.value = todoToEdit.description;
         todoDueDateInput.value = todoToEdit.dueDate;
         todoPriorityInput.value = todoToEdit.priority;
+        todoToEditArray = 1;
       } else {
         const project = node.classList[0];
         for (let i = 2; i < todoArrayFunctions.todoListArray.length; i++) {
@@ -283,15 +293,25 @@ export function UIFunctions() {
             todoDescriptionInput.value = todoToEdit.description;
             todoDueDateInput.value = todoToEdit.dueDate;
             todoPriorityInput.value = todoToEdit.priority;
+            projectSelect.value = todoToEdit.project;
+            todoToEditArray = i;
+            console.log(todoToEditArray);
           }
         }
       }
     }
-    console.log(todoToEdit);
   }
 
-  function clickEditTodo(todoToEdit) {
-    console.log(todoToEdit);
+  function clickEditTodo() {
+    todoArrayFunctions.removeTodo(todoToEditArray, todoToEditIndex);
+    todoArrayFunctions.addTodo(todoTitleInput.value,
+      todoDescriptionInput.value,
+      todoDueDateInput.value,
+      todoPriorityInput.value,
+      projectSelect.value);
+    toggleTodoForm();
+    displayTodoList();
+    todoArrayFunctions.todoListCounter();
   }
 
 
