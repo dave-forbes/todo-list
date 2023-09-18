@@ -183,6 +183,30 @@ label {
   cursor: pointer;
 }
 
+#clear-storage-button {
+  width: 50%;
+  padding: 1rem;
+}
+
+#clear-storage-button:hover,
+#clear-storage-button:focus {
+  background-color: var(--color2);
+  color: var(--color4);
+}
+
+#clear-storage-container {
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+#clear-storage-container p {
+  font-size: 0.9rem;
+  text-align: center;
+}
+
 /* main content */
 
 .main {
