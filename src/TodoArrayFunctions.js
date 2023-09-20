@@ -14,31 +14,25 @@ export function TodoArrayFunctions() {
   let todoListArrayToday;
   let todoListArrayUpcoming;
   let todoListCompleted;
-  let project;
+  const todoListArray = [];
+
+  // Shit code below to try and access todos on local storage or load in example todos
 
   if (localStorage.getItem("todoListArrayToday")) {
     todoListArrayToday = JSON.parse(localStorage.getItem("todoListArrayToday"));
     todoListArrayUpcoming = JSON.parse(localStorage.getItem("todoListArrayUpcoming"));
-    todoListCompleted = JSON.parse(localStorage.getItem("todoListCompleted"))
-    project = JSON.parse(localStorage.getItem("Project"));
+    todoListCompleted = JSON.parse(localStorage.getItem("todoListCompleted"));
   } else {
     todoListArrayToday = [{ title: "Task for today", description: "something here", priority: "medium", dueDate: today, project: 'Inbox', completed: false }];
     todoListArrayUpcoming = [{ title: "Task for tomorrow", description: "something here", priority: "medium", dueDate: tomorrow, project: 'Inbox', completed: false }, { title: "Task for next week", description: "something here", priority: "medium", dueDate: "2023-09-25", project: 'Inbox', completed: false }];
     todoListCompleted = [];
-    project = ['Project', { title: 'Study Web Development', description: '', dueDate: '2023-09-30', priority: '', project: 'Project', completed: false }];
   }
 
-  const todoListArray = [todoListArrayToday, todoListArrayUpcoming, todoListCompleted, project];
+  todoListArray.push(todoListArrayToday);
+  todoListArray.push(todoListArrayUpcoming);
+  todoListArray.push(todoListCompleted);
 
-  function updateLocalStorage() {
-    localStorage.setItem("todoListArrayToday", JSON.stringify(todoListArrayToday));
-    localStorage.setItem("todoListArrayUpcoming", JSON.stringify(todoListArrayUpcoming));
-    localStorage.setItem("todoListCompleted", JSON.stringify(todoListCompleted));
-
-    for (let i = 3; i < todoListArray.length; i++) {
-      localStorage.setItem(todoListArray[i][0], JSON.stringify(todoListArray[i]));
-    }
-  }
+  // Shit code above to try and access todos on local storage or load in example todos
 
   const CreateTodo = function (title, description, dueDate, priority, project, completed) {
     const todo = {};
@@ -63,13 +57,12 @@ export function TodoArrayFunctions() {
       }
     }
     console.log(todoListArray);
-    updateLocalStorage()
+    updateLocalStorage();
   }
 
   function addProject(value) {
     const newProject = [value];
     todoListArray.push(newProject);
-    console.log(todoListArray);
   }
 
   function todoListCounter() {
@@ -114,11 +107,21 @@ export function TodoArrayFunctions() {
     const completedTodo = todoListArray[array].splice(index, 1);
     todoListCompleted.push(completedTodo[0]);
     console.log(todoListArray);
-    updateLocalStorage()
+    updateLocalStorage();
   }
 
   function findTodo(array, index) {
     return todoListArray[array][index];
+  }
+
+  function updateLocalStorage() {
+    localStorage.setItem("todoListArrayToday", JSON.stringify(todoListArrayToday));
+    localStorage.setItem("todoListArrayUpcoming", JSON.stringify(todoListArrayUpcoming));
+    localStorage.setItem("todoListCompleted", JSON.stringify(todoListCompleted));
+
+    for (let i = 3; i < todoListArray.length; i++) {
+      localStorage.setItem(todoListArray[i][0], JSON.stringify(todoListArray[i]));
+    }
   }
 
   return {
