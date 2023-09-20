@@ -41,10 +41,6 @@
     <h2 class="projects-title">Projects</h2>
     <ul class="projects-nav">
       <div id=projects>
-        <div data-index="Project" class="nav-item project">
-          <i data-index="Project" class="fa-solid fa-diagram-project"></i>
-          <p data-index="Project">Project - <span data-index="Project"></span></p>
-        </div>
       </div>
       <div class="add-projects-container nav-item">
         <button class="add-project-form-button">+</button>
@@ -58,6 +54,12 @@
         </div>
       </div>
     </ul>
+    <div id="clear-storage-container">
+      <p>This page uses local storage to save your changes after refreshing the page, click the button below to clear
+        the
+        storage and revert back inital demo state.</p>
+      <button id="clear-storage-button">Clear Local Storage</button>
+    </div>
   </div>
   <div class="main">
     <div class="todos">
@@ -79,7 +81,6 @@
         <div class="flex">
           <select id="project-select">
             <option value="Inbox">Inbox</option>
-            <option value="Project">Project</option>
           </select>
           <div id="button-wrapper" class="flex">
             <button id="add-todo-button">Add Todo</button>
