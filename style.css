@@ -186,6 +186,7 @@ label {
 #clear-storage-button {
   width: 50%;
   padding: 1rem;
+  margin-bottom: 50px;
 }
 
 #clear-storage-button:hover,
@@ -309,7 +310,6 @@ div#button-wrapper button:focus {
   .side-bar {
     position: absolute;
     transform: translateX(-250px);
-    height: 100vh;
   }
 
   .todos {
@@ -385,4 +385,34 @@ input[type="checkbox"] {
 
 .side-bar-hide {
   transform: translateX(0px);
+}
+
+.todo-priority {
+  border-radius: 6px;
+  font-size: 0.7rem;
+  padding: 0.2rem 0.4rem;
+  display: grid;
+  place-items: center;
+  font-weight: 600;
+}
+
+.todo-priority {
+  padding: 0.4rem;
+}
+
+.todo-containers {
+  background-color: var(--color3);
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+}
+
+.todo-due-date {
+  font-size: 0.9rem;
+  padding: 0.5rem;
+}
+
+.todo-project {
+  font-size: 0.9rem;
+  padding: 0.5rem;
 }
