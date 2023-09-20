@@ -11,7 +11,7 @@ export function UIFunctions() {
   const cancelTodoForm = document.querySelector('#cancel-form');
   const addTodoForm = document.querySelector('.add-todo-form');
 
-  const toggleTodoForm = (text) => {
+  function toggleTodoForm(text) {
     if (todoToEditNode) todoToEditNode.classList.toggle('hide');
     addTodoForm.classList.toggle('hide');
     addTodoFormButton.classList.toggle('hide');
@@ -77,15 +77,27 @@ export function UIFunctions() {
   function displayTodoList() {
     todoList.innerHTML = '';
     if (currentPage == 'Inbox') {
-      todoArrayFunctions.todoListArray.forEach(array => array.forEach((item, index) => { if (typeof (item) == 'object' && item.completed == false) displayTodo(item, index) }));
+      todoArrayFunctions.todoListArray.forEach(array => array.forEach((item, index) => {
+        if (typeof (item) == 'object' && item.completed == false) displayTodo(item, index)
+      }));
     } else if (currentPage == 'Today') {
-      todoArrayFunctions.todoListArray.forEach(array => array.forEach((item, index) => { if (item.dueDate == todoArrayFunctions.today && item.completed == false) displayTodo(item, index) }));
+      todoArrayFunctions.todoListArray.forEach(array => array.forEach((item, index) => {
+        if (item.dueDate == todoArrayFunctions.today && item.completed == false) displayTodo(item, index)
+      }));
     } else if (currentPage == 'Upcoming') {
-      todoArrayFunctions.todoListArray.forEach(array => array.forEach((item, index) => { if (item.dueDate !== todoArrayFunctions.today && typeof (item) == 'object' && item.completed == false) displayTodo(item, index) }));
+      todoArrayFunctions.todoListArray.forEach(array => array.forEach((item, index) => {
+        if (item.dueDate !== todoArrayFunctions.today && typeof (item) == 'object' && item.completed == false) {
+          displayTodo(item, index)
+        }
+      }));
     } else if (currentPage == 'Completed') {
       todoArrayFunctions.todoListCompleted.forEach((item, index) => displayTodo(item, index));
     } else {
-      todoArrayFunctions.todoListArray.forEach(array => array.forEach((item, index) => { if (item.project == currentPage && typeof (item) == 'object' && item.completed == false) displayTodo(item, index) }));
+      todoArrayFunctions.todoListArray.forEach(array => array.forEach((item, index) => {
+        if (item.project == currentPage && typeof (item) == 'object' && item.completed == false) {
+          displayTodo(item, index)
+        }
+      }));
     }
   }
 
@@ -125,7 +137,7 @@ export function UIFunctions() {
     todoDescription.textContent = todo.description;
 
     const todoPriority = document.createElement('div');
-    todoPriority.style.cssText = 'border-radius: 6px; font-size: 0.7rem; padding:0.2rem 0.4rem; display: grid; place-items: center; font-weight: 600;';
+    todoPriority.classList.add('todo-priority');
 
     if (todo.priority == 'low' || todo.priority == '') {
       todoPriority.style.backgroundColor = 'green';
@@ -138,7 +150,8 @@ export function UIFunctions() {
       todoPriority.textContent = 'High Priority';
     }
     const priorityContainer = document.createElement('div');
-    priorityContainer.style.cssText = 'padding: 0.4rem; background-color: var(--color3); border-radius: 10px; display: grid; place-items: center;'
+    priorityContainer.classList.add('todo-priority');
+    priorityContainer.classList.add('todo-containers');
     priorityContainer.appendChild(todoPriority);
 
     const todoDueDate = document.createElement('p');
@@ -146,7 +159,8 @@ export function UIFunctions() {
     todoDueDate.style.cssText = 'margin: 0;'
 
     const dueDateContainer = document.createElement('div');
-    dueDateContainer.style.cssText = 'font-size: 0.9rem; padding: 0.5rem; background-color: var(--color3); border-radius: 10px; display: grid; place-items: center;'
+    dueDateContainer.classList.add('todo-due-date');
+    dueDateContainer.classList.add('todo-containers');
     dueDateContainer.appendChild(todoDueDate);
 
     const flexDiv = document.createElement('div');
@@ -155,7 +169,8 @@ export function UIFunctions() {
     flexDiv.appendChild(dueDateContainer);
     if (todo.project !== 'Inbox') {
       const projectContainer = document.createElement('div');
-      projectContainer.style.cssText = 'font-size: 0.9rem; padding: 0.5rem; background-color: var(--color3); border-radius: 10px; display: grid; place-items: center;'
+      projectContainer.classList.add('todo-project');
+      projectContainer.classList.add('todo-containers');
       projectContainer.innerHTML = todo.project;
       flexDiv.appendChild(projectContainer);
     }
@@ -193,8 +208,11 @@ export function UIFunctions() {
 
   function switchTodoListType(e) {
     console.log(e.target.parentElement);
-    if (e.target.classList.contains('nav-item') || e.target.parentElement.classList.contains('nav-item') || e.target.parentElement.parentElement.classList.contains('nav-item')) {
-      if (e.target.classList.contains('add-projects-container') || e.target.parentElement.classList.contains('add-projects-container')) return;
+    if (e.target.classList.contains('nav-item') ||
+      e.target.parentElement.classList.contains('nav-item') ||
+      e.target.parentElement.parentElement.classList.contains('nav-item')) {
+      if (e.target.classList.contains('add-projects-container') ||
+        e.target.parentElement.classList.contains('add-projects-container')) return;
       const todoListType = document.querySelector('.todo-list-type');
       todoListType.innerHTML = e.target.dataset.index;
       currentPage = e.target.dataset.index;
