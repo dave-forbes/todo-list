@@ -200,7 +200,6 @@ export function UIFunctions() {
       currentPage = e.target.dataset.index;
       displayTodoList();
       toggleSideBar();
-      console.log(currentPage);
     }
   }
 
@@ -218,7 +217,7 @@ export function UIFunctions() {
         const project = node.classList[0];
         for (let i = 2; i < todoArrayFunctions.todoListArray.length; i++) {
           if (todoArrayFunctions.todoListArray[i][0] == project) {
-            todoArrayFunctions.completeTodo(i, index)
+            todoArrayFunctions.completeTodo(i, index);
           }
         }
       }
@@ -233,7 +232,6 @@ export function UIFunctions() {
     if (e.target.classList.contains('fa-trash')) {
       const node = e.target.parentElement.parentElement.parentElement;
       const index = node.dataset.index;
-      console.log({ node, index });
       if (node.classList.contains('today')) {
         todoArrayFunctions.removeTodo(0, index);
       } else if (node.classList.contains('upcoming')) {
@@ -248,7 +246,6 @@ export function UIFunctions() {
       }
       displayTodoList();
       todoArrayFunctions.todoListCounter();
-      console.log(todoArrayFunctions.todoListArray);
     }
   }
 
@@ -268,7 +265,6 @@ export function UIFunctions() {
       node.classList.toggle('hide');
       const index = node.dataset.index;
       todoToEditIndex = index;
-      console.log(todoToEditIndex);
       todoToEditNode = node;
       if (node.classList.contains('today')) {
         todoToEdit = todoArrayFunctions.findTodo(0, index);
@@ -295,7 +291,6 @@ export function UIFunctions() {
             todoPriorityInput.value = todoToEdit.priority;
             projectSelect.value = todoToEdit.project;
             todoToEditArray = i;
-            console.log(todoToEditArray);
           }
         }
       }
@@ -322,6 +317,10 @@ export function UIFunctions() {
     location.reload();
   }
 
+  function displayNumberOfTodos(listType, counter) {
+    document.querySelector(`span[data-index="${listType}"]`).textContent = counter;
+  }
+
   const clearStorageButton = document.querySelector('#clear-storage-button');
 
   function eventListeners() {
@@ -344,9 +343,13 @@ export function UIFunctions() {
       }
     });
     addProjectsButton.addEventListener('click', () => {
-      todoArrayFunctions.addProject(addProjectsInput.value);
-      displayProject(addProjectsInput.value);
+      const value = addProjectsInput.value;
+      const newValue = value.replaceAll(/\s/g, '-');
+      console.log(value);
+      todoArrayFunctions.addProject(newValue);
+      displayProject(newValue);
       toggleProjectForm();
+      todoArrayFunctions.todoListCounter();
     });
     sideBar.addEventListener('click', (e) => switchTodoListType(e));
     document.addEventListener('click', checkCompleteTodo);
@@ -356,13 +359,11 @@ export function UIFunctions() {
     clearStorageButton.addEventListener('click', clearStorage);
   }
 
-  function displayNumberOfTodos(listType, counter) {
-    document.querySelector(`span[data-index="${listType}"]`).textContent = counter;
-  }
-
   return {
     eventListeners,
     displayTodoList,
-    displayNumberOfTodos
+    displayNumberOfTodos,
+    displayProject,
+    displayTodo
   }
 }
