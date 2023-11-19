@@ -28,7 +28,9 @@ export default class TodoList {
 
   calculateRemainingDays(dueDate) {
     let result;
-    if (dueDate === this.todayDate) {
+    if (dueDate === "") {
+      return "No due date";
+    } else if (dueDate === this.todayDate) {
       result = `Due today!`;
     } else if (dueDate === this.tomorrowDate) {
       result = `Due tomorrow!`;
