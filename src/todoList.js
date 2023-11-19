@@ -3,7 +3,7 @@ import Todo from "./todo.js";
 export default class TodoList {
   constructor() {
     this.today = [];
-    this.upcomming = [];
+    this.upcoming = [];
     this.completed = [];
     this.todayDate = this.getTodaysDate();
     this.tomorrowDate = this.getTomorrowsDate();
@@ -26,6 +26,24 @@ export default class TodoList {
     return this.dateFormat(date);
   }
 
+  calculateRemainingDays(dueDate) {
+    let result;
+    if (dueDate === this.todayDate) {
+      result = `Due today!`;
+    } else if (dueDate === this.tomorrowDate) {
+      result = `Due tomorrow!`;
+    } else {
+      for (let i = 0; i < 100; i += 1) {
+        const date = new Date();
+        date.setDate(date.getDate() + i);
+        if (dueDate === this.dateFormat(date)) {
+          result = `Due in ${i} days`;
+        }
+      }
+    }
+    return result;
+  }
+
   addTodo(title, description, dueDate, priority, project) {
     const newTodo = new Todo(
       title,
@@ -38,7 +56,7 @@ export default class TodoList {
     if (newTodo.dueDate === this.todayDate && newTodo.project === "Inbox")
       this.today.push(newTodo);
     if (newTodo.dueDate !== this.todayDate && newTodo.project === "Inbox")
-      this.upcomming.push(newTodo);
+      this.upcoming.push(newTodo);
     if (newTodo.project !== "Inbox") {
       for (const property in this) {
         if (property === newTodo.project) {
