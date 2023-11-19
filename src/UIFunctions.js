@@ -1,17 +1,6 @@
 import TodoList from "./todoList.js";
 
 export function UIFunctions() {
-  const addProjectsInput = document.querySelector("#add-projects-input");
-  const todoTitleInput = document.querySelector("#todo-title-input");
-  const todoDescriptionInput = document.querySelector(
-    "#todo-description-input"
-  );
-  const todoDueDateInput = document.querySelector("#todo-due-date-input");
-  const todoPriorityInput = document.querySelector("#todo-priority-input");
-  const projectSelect = document.querySelector("#project-select");
-  const addProjectsButton = document.querySelector("#add-projects-button");
-  const addTodoButton = document.querySelector("#add-todo-button");
-
   const todoList = new TodoList();
 
   function retrieveLocalStorage() {
@@ -37,11 +26,9 @@ export function UIFunctions() {
 
   let currentPage = "Inbox";
 
-  const addTodoFormButton = document.querySelector(".add-todo-container");
-  const cancelTodoForm = document.querySelector("#cancel-form");
-  const addTodoForm = document.querySelector(".add-todo-form");
-
   function toggleTodoForm(text) {
+    const addTodoFormButton = document.querySelector(".add-todo-container");
+    const addTodoForm = document.querySelector(".add-todo-form");
     if (todoToEditNode) todoToEditNode.classList.toggle("hide");
     addTodoForm.classList.toggle("hide");
     addTodoFormButton.classList.toggle("hide");
@@ -50,16 +37,12 @@ export function UIFunctions() {
     clearTodoForm();
   }
 
-  const addProjectsFormButton = document.querySelector(
-    ".add-projects-container"
-  );
-  const cancelProjectsButton = document.querySelector(
-    "#cancel-project-form-button"
-  );
-  const addProjectsForm = document.querySelector(".add-projects-form");
-
   function toggleProjectForm() {
+    const addProjectsForm = document.querySelector(".add-projects-form");
     addProjectsForm.classList.toggle("hide");
+    const addProjectsFormButton = document.querySelector(
+      ".add-projects-container"
+    );
     addProjectsFormButton.classList.toggle("hide");
     clearProjectsForm();
   }
@@ -68,6 +51,7 @@ export function UIFunctions() {
     const option = document.createElement("option");
     option.value = title;
     option.innerHTML = title;
+    const projectSelect = document.querySelector("#project-select");
     projectSelect.appendChild(option);
     const projectsDiv = document.querySelector("#projects");
     const p = document.createElement("p");
@@ -87,17 +71,22 @@ export function UIFunctions() {
   }
 
   function clearProjectsForm() {
+    const addProjectsInput = document.querySelector("#add-projects-input");
     addProjectsInput.value = "";
   }
 
   function clearTodoForm() {
+    const todoTitleInput = document.querySelector("#todo-title-input");
+    const todoDescriptionInput = document.querySelector(
+      "#todo-description-input"
+    );
+    const todoDueDateInput = document.querySelector("#todo-due-date-input");
+    const todoPriorityInput = document.querySelector("#todo-priority-input");
     todoTitleInput.value = "";
     todoDescriptionInput.value = "";
     todoDueDateInput.value = "";
     todoPriorityInput.value = "";
   }
-
-  const todoListUI = document.querySelector(".todo-list");
 
   function displayTodo(todo, index) {
     const container = document.createElement("div");
@@ -112,6 +101,7 @@ export function UIFunctions() {
     const todoTitle = document.createElement("div");
     todoTitle.classList.add("todo-title");
     const todoTitleText = document.createElement("h4");
+    if (todo.title === "") todo.title = "Untitled";
     todoTitleText.textContent = todo.title;
     const todoCheckBox = document.createElement("input");
     todoCheckBox.setAttribute("type", "checkbox");
@@ -187,10 +177,12 @@ export function UIFunctions() {
     container.appendChild(todoDescription);
     container.appendChild(flexDiv);
     container.classList.add("todo");
+    const todoListUI = document.querySelector(".todo-list");
     todoListUI.appendChild(container);
   }
 
   function displayTodoList() {
+    const todoListUI = document.querySelector(".todo-list");
     todoListUI.innerHTML = "";
     if (currentPage === "Inbox") {
       for (const array in todoList) {
@@ -228,9 +220,8 @@ export function UIFunctions() {
     }
   }
 
-  const sideBar = document.querySelector(".side-bar");
-
   function toggleSideBar() {
+    const sideBar = document.querySelector(".side-bar");
     sideBar.classList.toggle("side-bar-hide");
   }
 
@@ -304,6 +295,13 @@ export function UIFunctions() {
   let todoToEditNode;
 
   function toggleEditTodoForm(e) {
+    const todoTitleInput = document.querySelector("#todo-title-input");
+    const todoDescriptionInput = document.querySelector(
+      "#todo-description-input"
+    );
+    const todoDueDateInput = document.querySelector("#todo-due-date-input");
+    const todoPriorityInput = document.querySelector("#todo-priority-input");
+    const projectSelect = document.querySelector("#project-select");
     if (e.target.classList.contains("fa-pen-to-square")) {
       toggleTodoForm("Edit Todo");
       const node = e.target.parentElement.parentElement.parentElement;
@@ -319,12 +317,12 @@ export function UIFunctions() {
         todoPriorityInput.value = todoToEdit.priority;
         todoToEditArray = todoList.today;
       } else if (node.classList.contains("upcoming")) {
-        todoToEdit = todoList.findTodo(todoList.upcomming, index);
+        todoToEdit = todoList.findTodo(todoList.upcoming, index);
         todoTitleInput.value = todoToEdit.title;
         todoDescriptionInput.value = todoToEdit.description;
         todoDueDateInput.value = todoToEdit.dueDate;
         todoPriorityInput.value = todoToEdit.priority;
-        todoToEditArray = todoList.upcomming;
+        todoToEditArray = todoList.upcoming;
       } else {
         const project = node.classList[0];
         for (const property in todoList) {
@@ -343,6 +341,13 @@ export function UIFunctions() {
   }
 
   function clickEditTodo() {
+    const todoTitleInput = document.querySelector("#todo-title-input");
+    const todoDescriptionInput = document.querySelector(
+      "#todo-description-input"
+    );
+    const todoDueDateInput = document.querySelector("#todo-due-date-input");
+    const todoPriorityInput = document.querySelector("#todo-priority-input");
+    const projectSelect = document.querySelector("#project-select");
     todoList.removeTodo(todoToEditArray, todoToEditIndex);
     todoList.addTodo(
       todoTitleInput.value,
@@ -355,8 +360,6 @@ export function UIFunctions() {
     displayTodoList();
   }
 
-  const burgerMenu = document.querySelectorAll(".burger-menu");
-
   function clearStorage() {
     localStorage.clear();
     location.reload();
@@ -366,8 +369,6 @@ export function UIFunctions() {
     document.querySelector(`span[data-index="${listType}"]`).textContent =
       counter;
   }
-
-  const clearStorageButton = document.querySelector("#clear-storage-button");
 
   function todoListCounter() {
     let inboxCounter = 0;
@@ -416,49 +417,77 @@ export function UIFunctions() {
     }
   }
 
+  function clickAddTodo() {
+    const todoTitleInput = document.querySelector("#todo-title-input");
+    const todoDescriptionInput = document.querySelector(
+      "#todo-description-input"
+    );
+    const todoDueDateInput = document.querySelector("#todo-due-date-input");
+    const todoPriorityInput = document.querySelector("#todo-priority-input");
+    const projectSelect = document.querySelector("#project-select");
+    const addTodoButton = document.querySelector("#add-todo-button");
+    if (addTodoButton.textContent === "Add Todo") {
+      todoList.addTodo(
+        todoTitleInput.value,
+        todoDescriptionInput.value,
+        todoDueDateInput.value,
+        todoPriorityInput.value,
+        projectSelect.value
+      );
+      toggleTodoForm();
+      displayTodoList();
+      todoListCounter();
+    } else {
+      clickEditTodo();
+      todoListCounter();
+    }
+  }
+
+  function clickAddProjects() {
+    const addProjectsInput = document.querySelector("#add-projects-input");
+    const { value } = addProjectsInput;
+    const newValue = value.replaceAll(/\s/g, "-");
+    todoList.addProject(newValue);
+    displayProject(newValue);
+    toggleProjectForm();
+    todoListCounter();
+  }
+
+  function saveData(e) {
+    if (e.target.id === "clear-storage-button") return;
+    const data = JSON.stringify(todoList);
+    localStorage.clear();
+    localStorage.setItem("todoList", data);
+  }
+
   function eventListeners() {
+    const addTodoFormButton = document.querySelector(".add-todo-container");
     addTodoFormButton.addEventListener("click", () =>
       toggleTodoForm("Add Todo")
     );
+    const cancelTodoForm = document.querySelector("#cancel-form");
     cancelTodoForm.addEventListener("click", toggleTodoForm);
+    const addProjectsFormButton = document.querySelector(
+      ".add-projects-container"
+    );
     addProjectsFormButton.addEventListener("click", toggleProjectForm);
+    const cancelProjectsButton = document.querySelector(
+      "#cancel-project-form-button"
+    );
     cancelProjectsButton.addEventListener("click", toggleProjectForm);
-    addTodoButton.addEventListener("click", () => {
-      if (addTodoButton.textContent === "Add Todo") {
-        todoList.addTodo(
-          todoTitleInput.value,
-          todoDescriptionInput.value,
-          todoDueDateInput.value,
-          todoPriorityInput.value,
-          projectSelect.value
-        );
-        toggleTodoForm();
-        displayTodoList();
-        todoListCounter();
-      } else {
-        clickEditTodo();
-        todoListCounter();
-      }
-    });
-    addProjectsButton.addEventListener("click", () => {
-      const { value } = addProjectsInput;
-      const newValue = value.replaceAll(/\s/g, "-");
-      todoList.addProject(newValue);
-      displayProject(newValue);
-      toggleProjectForm();
-      todoListCounter();
-    });
+    const addTodoButton = document.querySelector("#add-todo-button");
+    addTodoButton.addEventListener("click", clickAddTodo);
+    const addProjectsButton = document.querySelector("#add-projects-button");
+    addProjectsButton.addEventListener("click", clickAddProjects);
+    const sideBar = document.querySelector(".side-bar");
     sideBar.addEventListener("click", (e) => switchTodoListType(e));
     document.addEventListener("click", checkCompleteTodo);
     document.addEventListener("click", clickRemoveTodo);
     document.addEventListener("click", toggleEditTodoForm);
+    const burgerMenu = document.querySelectorAll(".burger-menu");
     burgerMenu.forEach((menu) => menu.addEventListener("click", toggleSideBar));
-    window.addEventListener("click", (e) => {
-      if (e.target.id === "clear-storage-button") return;
-      const data = JSON.stringify(todoList);
-      localStorage.clear();
-      localStorage.setItem("todoList", data);
-    });
+    window.addEventListener("click", saveData);
+    const clearStorageButton = document.querySelector("#clear-storage-button");
     clearStorageButton.addEventListener("click", clearStorage);
   }
 
