@@ -1,13 +1,15 @@
-const path = require('path');
+import { resolve } from "path";
+import { fileURLToPath } from "url";
+import { dirname } from "path";
 
-module.exports = {
-  mode: 'development',
-  entry: {
-    index: './src/index.js',
-  },
-  devtool: 'inline-source-map',
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+export default {
+  entry: "./src/index.js",
+  mode: "development",
   output: {
-    filename: '[name].bundle.js',
-    path: path.resolve(__dirname, 'dist'),
+    filename: "bundle.js",
+    path: resolve(__dirname, "dist"),
   },
 };

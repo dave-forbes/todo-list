@@ -5,22 +5,26 @@
     "url": "git+https://github.com/dave-forbes/todo-list.git"
   },
   "description": "",
-  "main": "index.js",
+  "private": true,
   "directories": {
     "doc": "docs"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
     "watch": "webpack --watch",
     "build": "webpack --mode=development",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d dist"
   },
+  "type": "module",
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@babel/preset-env": "^7.23.3",
+    "babel-jest": "^29.7.0",
     "css-loader": "^6.8.1",
     "gh-pages": "^6.0.0",
+    "jest": "^29.7.0",
     "style-loader": "^3.3.3",
     "webpack": "^5.88.2",
     "webpack-cli": "^5.1.4"
