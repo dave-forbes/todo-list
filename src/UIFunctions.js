@@ -1,7 +1,39 @@
 import TodoList from "./todoList.js";
 
 export function UIFunctions() {
+  const addProjectsInput = document.querySelector("#add-projects-input");
+  const todoTitleInput = document.querySelector("#todo-title-input");
+  const todoDescriptionInput = document.querySelector(
+    "#todo-description-input"
+  );
+  const todoDueDateInput = document.querySelector("#todo-due-date-input");
+  const todoPriorityInput = document.querySelector("#todo-priority-input");
+  const projectSelect = document.querySelector("#project-select");
+  const addProjectsButton = document.querySelector("#add-projects-button");
+  const addTodoButton = document.querySelector("#add-todo-button");
+
   const todoList = new TodoList();
+
+  function retrieveLocalStorage() {
+    const data = JSON.parse(localStorage.getItem("todoList"));
+    if (data) {
+      todoList.today = data.today;
+      todoList.upcoming = data.upcoming;
+      todoList.completed = data.completed;
+      for (const project in data) {
+        if (
+          project !== "today" &&
+          project !== "upcoming" &&
+          project !== "completed" &&
+          project !== "todayDate" &&
+          project !== "tomorrowDate"
+        ) {
+          todoList[project] = data[project];
+          displayProject(project);
+        }
+      }
+    }
+  }
 
   let currentPage = "Inbox";
 
@@ -54,17 +86,6 @@ export function UIFunctions() {
     div.setAttribute("data-index", title);
   }
 
-  const addProjectsInput = document.querySelector("#add-projects-input");
-  const todoTitleInput = document.querySelector("#todo-title-input");
-  const todoDescriptionInput = document.querySelector(
-    "#todo-description-input"
-  );
-  const todoDueDateInput = document.querySelector("#todo-due-date-input");
-  const todoPriorityInput = document.querySelector("#todo-priority-input");
-  const projectSelect = document.querySelector("#project-select");
-  const addProjectsButton = document.querySelector("#add-projects-button");
-  const addTodoButton = document.querySelector("#add-todo-button");
-
   function clearProjectsForm() {
     addProjectsInput.value = "";
   }
@@ -74,24 +95,6 @@ export function UIFunctions() {
     todoDescriptionInput.value = "";
     todoDueDateInput.value = "";
     todoPriorityInput.value = "";
-  }
-
-  function calculateRemainingDays(dueDate) {
-    let result;
-    if (dueDate === todoList.todayDate) {
-      result = `Due today!`;
-    } else if (dueDate === todoList.tomorrowDate) {
-      result = `Due tomorrow!`;
-    } else {
-      for (let i = 0; i < 100; i += 1) {
-        const date = new Date();
-        date.setDate(date.getDate() + i);
-        if (dueDate === todoList.dateFormat(date)) {
-          result = `Due in ${i} days`;
-        }
-      }
-    }
-    return result;
   }
 
   const todoListUI = document.querySelector(".todo-list");
@@ -153,7 +156,7 @@ export function UIFunctions() {
     priorityContainer.appendChild(todoPriority);
 
     const todoDueDate = document.createElement("p");
-    todoDueDate.textContent = calculateRemainingDays(todo.dueDate);
+    todoDueDate.textContent = todoList.calculateRemainingDays(todo.dueDate);
     todoDueDate.style.cssText = "margin: 0;";
 
     const dueDateContainer = document.createElement("div");
@@ -202,7 +205,7 @@ export function UIFunctions() {
           displayTodo(item, index);
       });
     } else if (currentPage === "Upcoming") {
-      todoList.upcomming.forEach((item, index) => {
+      todoList.upcoming.forEach((item, index) => {
         if (item.dueDate !== todoList.todayDate && item.completed === false) {
           displayTodo(item, index);
         }
@@ -258,7 +261,7 @@ export function UIFunctions() {
       if (node.classList.contains("today")) {
         todoList.completeTodo(todoList.today, index);
       } else if (node.classList.contains("upcoming")) {
-        todoList.completeTodo(todoList.upcomming, index);
+        todoList.completeTodo(todoList.upcoming, index);
       } else {
         const project = node.classList[0];
         for (const property in todoList) {
@@ -281,7 +284,7 @@ export function UIFunctions() {
       if (node.classList.contains("today")) {
         todoList.removeTodo(todoList.today, index);
       } else if (node.classList.contains("upcoming")) {
-        todoList.removeTodo(todoList.upcomming, index);
+        todoList.removeTodo(todoList.upcoming, index);
       } else {
         const project = node.classList[0];
         for (const property in todoList) {
@@ -387,7 +390,7 @@ export function UIFunctions() {
     });
     displayNumberOfTodos("Today", todayCounter);
 
-    todoList.upcomming.forEach((item) => {
+    todoList.upcoming.forEach((item) => {
       if (typeof item === "object" && item.completed === false)
         upcomingCounter++;
     });
@@ -399,16 +402,17 @@ export function UIFunctions() {
     for (const array in todoList) {
       let counter = 0;
       if (
-        typeof todoList[array] !== "object" ||
-        array === "today" ||
-        array === "upcomming" ||
-        array === "completed"
-      )
-        continue;
-      todoList[array].forEach(() => {
-        counter++;
-      });
-      displayNumberOfTodos(array, counter);
+        array !== "today" &&
+        array !== "upcoming" &&
+        array !== "completed" &&
+        array !== "todayDate" &&
+        array !== "tomorrowDate"
+      ) {
+        todoList[array].forEach(() => {
+          counter++;
+        });
+        displayNumberOfTodos(array, counter);
+      }
     }
   }
 
@@ -449,15 +453,19 @@ export function UIFunctions() {
     document.addEventListener("click", clickRemoveTodo);
     document.addEventListener("click", toggleEditTodoForm);
     burgerMenu.forEach((menu) => menu.addEventListener("click", toggleSideBar));
+    window.addEventListener("click", (e) => {
+      if (e.target.id === "clear-storage-button") return;
+      const data = JSON.stringify(todoList);
+      localStorage.clear();
+      localStorage.setItem("todoList", data);
+    });
     clearStorageButton.addEventListener("click", clearStorage);
   }
 
   return {
     eventListeners,
     displayTodoList,
-    displayNumberOfTodos,
-    displayProject,
-    displayTodo,
     todoListCounter,
+    retrieveLocalStorage,
   };
 }
