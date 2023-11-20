@@ -13,15 +13,25 @@ export function UIFunctions() {
         if (
           project !== "today" &&
           project !== "upcoming" &&
-          project !== "completed" &&
-          project !== "todayDate" &&
-          project !== "tomorrowDate"
+          project !== "completed"
         ) {
           todoList[project] = data[project];
           displayProject(project);
         }
       }
     }
+  }
+
+  function clearStorage() {
+    localStorage.clear();
+    location.reload();
+  }
+
+  function saveData(e) {
+    if (e.target.id === "clear-storage-button") return;
+    const data = JSON.stringify(todoList);
+    localStorage.clear();
+    localStorage.setItem("todoList", data);
   }
 
   let currentPage = "Inbox";
@@ -92,9 +102,9 @@ export function UIFunctions() {
     const container = document.createElement("div");
     container.setAttribute("data-index", index);
 
-    if (todo.dueDate === todoList.todayDate && todo.project === "Inbox")
+    if (todo.dueDate === todoList.getTodaysDate() && todo.project === "Inbox")
       container.classList.add("today");
-    if (todo.dueDate !== todoList.todayDate && todo.project === "Inbox")
+    if (todo.dueDate !== todoList.getTodaysDate() && todo.project === "Inbox")
       container.classList.add("upcoming");
     if (todo.project !== "Inbox") container.classList.add(todo.project);
 
@@ -186,33 +196,20 @@ export function UIFunctions() {
     todoListUI.innerHTML = "";
     if (currentPage === "Inbox") {
       for (const array in todoList) {
-        if (typeof todoList[array] !== "object") continue;
         todoList[array].forEach((item, index) => {
           if (item.completed === false) displayTodo(item, index);
         });
       }
     } else if (currentPage === "Today") {
-      todoList.today.forEach((item, index) => {
-        if (item.dueDate === todoList.todayDate && item.completed === false)
-          displayTodo(item, index);
-      });
+      todoList.today.forEach((item, index) => displayTodo(item, index));
     } else if (currentPage === "Upcoming") {
-      todoList.upcoming.forEach((item, index) => {
-        if (item.dueDate !== todoList.todayDate && item.completed === false) {
-          displayTodo(item, index);
-        }
-      });
+      todoList.upcoming.forEach((item, index) => displayTodo(item, index));
     } else if (currentPage === "Completed") {
       todoList.completed.forEach((item, index) => displayTodo(item, index));
     } else {
-      for (const property in todoList) {
-        if (typeof todoList[property] !== "object") continue;
-        todoList[property].forEach((item, index) => {
-          if (
-            item.project === currentPage &&
-            typeof item === "object" &&
-            item.completed === false
-          ) {
+      for (const array in todoList) {
+        todoList[array].forEach((item, index) => {
+          if (item.project === currentPage && item.completed === false) {
             displayTodo(item, index);
           }
         });
@@ -255,9 +252,9 @@ export function UIFunctions() {
         todoList.completeTodo(todoList.upcoming, index);
       } else {
         const project = node.classList[0];
-        for (const property in todoList) {
-          if (project === property) {
-            todoList.completeTodo(todoList[property], index);
+        for (const array in todoList) {
+          if (project === array) {
+            todoList.completeTodo(todoList[array], index);
           }
         }
       }
@@ -278,9 +275,9 @@ export function UIFunctions() {
         todoList.removeTodo(todoList.upcoming, index);
       } else {
         const project = node.classList[0];
-        for (const property in todoList) {
-          if (project === property) {
-            todoList.removeTodo(todoList[property], index);
+        for (const array in todoList) {
+          if (project === array) {
+            todoList.removeTodo(todoList[array], index);
           }
         }
       }
@@ -294,7 +291,7 @@ export function UIFunctions() {
   let todoToEditIndex;
   let todoToEditNode;
 
-  function toggleEditTodoForm(e) {
+  function preFillFormInputs() {
     const todoTitleInput = document.querySelector("#todo-title-input");
     const todoDescriptionInput = document.querySelector(
       "#todo-description-input"
@@ -302,6 +299,14 @@ export function UIFunctions() {
     const todoDueDateInput = document.querySelector("#todo-due-date-input");
     const todoPriorityInput = document.querySelector("#todo-priority-input");
     const projectSelect = document.querySelector("#project-select");
+    todoTitleInput.value = todoToEdit.title;
+    todoDescriptionInput.value = todoToEdit.description;
+    todoDueDateInput.value = todoToEdit.dueDate;
+    todoPriorityInput.value = todoToEdit.priority;
+    projectSelect.value = todoToEdit.project;
+  }
+
+  function toggleEditTodoForm(e) {
     if (e.target.classList.contains("fa-pen-to-square")) {
       toggleTodoForm("Edit Todo");
       const node = e.target.parentElement.parentElement.parentElement;
@@ -311,29 +316,19 @@ export function UIFunctions() {
       todoToEditNode = node;
       if (node.classList.contains("today")) {
         todoToEdit = todoList.findTodo(todoList.today, index);
-        todoTitleInput.value = todoToEdit.title;
-        todoDescriptionInput.value = todoToEdit.description;
-        todoDueDateInput.value = todoToEdit.dueDate;
-        todoPriorityInput.value = todoToEdit.priority;
+        preFillFormInputs();
         todoToEditArray = todoList.today;
       } else if (node.classList.contains("upcoming")) {
         todoToEdit = todoList.findTodo(todoList.upcoming, index);
-        todoTitleInput.value = todoToEdit.title;
-        todoDescriptionInput.value = todoToEdit.description;
-        todoDueDateInput.value = todoToEdit.dueDate;
-        todoPriorityInput.value = todoToEdit.priority;
+        preFillFormInputs();
         todoToEditArray = todoList.upcoming;
       } else {
         const project = node.classList[0];
-        for (const property in todoList) {
-          if (property === project) {
-            todoToEdit = todoList.findTodo(todoList[property], index);
-            todoTitleInput.value = todoToEdit.title;
-            todoDescriptionInput.value = todoToEdit.description;
-            todoDueDateInput.value = todoToEdit.dueDate;
-            todoPriorityInput.value = todoToEdit.priority;
-            projectSelect.value = todoToEdit.project;
-            todoToEditArray = todoList[property];
+        for (const array in todoList) {
+          if (array === project) {
+            todoToEdit = todoList.findTodo(todoList[array], index);
+            preFillFormInputs();
+            todoToEditArray = todoList[array];
           }
         }
       }
@@ -360,11 +355,6 @@ export function UIFunctions() {
     displayTodoList();
   }
 
-  function clearStorage() {
-    localStorage.clear();
-    location.reload();
-  }
-
   function displayNumberOfTodos(listType, counter) {
     document.querySelector(`span[data-index="${listType}"]`).textContent =
       counter;
@@ -372,43 +362,30 @@ export function UIFunctions() {
 
   function todoListCounter() {
     let inboxCounter = 0;
-    let todayCounter = 0;
-    let upcomingCounter = 0;
-    let completedCounter = 0;
     for (const array in todoList) {
-      if (typeof todoList[array] === "object") {
-        todoList[array].forEach((item) => {
-          if (item.completed === false) {
-            inboxCounter++;
-          }
-        });
-      }
+      todoList[array].forEach((item) => {
+        if (item.completed === false) {
+          inboxCounter++;
+        }
+      });
     }
     displayNumberOfTodos("Inbox", inboxCounter);
 
-    todoList.today.forEach((item) => {
-      if (typeof item === "object" && item.completed === false) todayCounter++;
-    });
+    let todayCounter = 0;
+    todoList.today.forEach(() => todayCounter++);
     displayNumberOfTodos("Today", todayCounter);
 
-    todoList.upcoming.forEach((item) => {
-      if (typeof item === "object" && item.completed === false)
-        upcomingCounter++;
-    });
+    let upcomingCounter = 0;
+    todoList.upcoming.forEach(() => upcomingCounter++);
     displayNumberOfTodos("Upcoming", upcomingCounter);
 
+    let completedCounter = 0;
     todoList.completed.forEach(() => completedCounter++);
     displayNumberOfTodos("Completed", completedCounter);
 
     for (const array in todoList) {
       let counter = 0;
-      if (
-        array !== "today" &&
-        array !== "upcoming" &&
-        array !== "completed" &&
-        array !== "todayDate" &&
-        array !== "tomorrowDate"
-      ) {
+      if (array !== "today" && array !== "upcoming" && array !== "completed") {
         todoList[array].forEach(() => {
           counter++;
         });
@@ -447,17 +424,10 @@ export function UIFunctions() {
     const addProjectsInput = document.querySelector("#add-projects-input");
     const { value } = addProjectsInput;
     const newValue = value.replaceAll(/\s/g, "-");
-    todoList.addProject(newValue);
-    displayProject(newValue);
+    const success = todoList.addProject(newValue);
+    if (success) displayProject(newValue);
     toggleProjectForm();
     todoListCounter();
-  }
-
-  function saveData(e) {
-    if (e.target.id === "clear-storage-button") return;
-    const data = JSON.stringify(todoList);
-    localStorage.clear();
-    localStorage.setItem("todoList", data);
   }
 
   function eventListeners() {
