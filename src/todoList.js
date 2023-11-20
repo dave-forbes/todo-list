@@ -5,8 +5,6 @@ export default class TodoList {
     this.today = [];
     this.upcoming = [];
     this.completed = [];
-    this.todayDate = this.getTodaysDate();
-    this.tomorrowDate = this.getTomorrowsDate();
   }
 
   dateFormat(date) {
@@ -30,9 +28,9 @@ export default class TodoList {
     let result;
     if (dueDate === "") {
       return "No due date";
-    } else if (dueDate === this.todayDate) {
+    } else if (dueDate === this.getTodaysDate()) {
       result = `Due today!`;
-    } else if (dueDate === this.tomorrowDate) {
+    } else if (dueDate === this.getTomorrowsDate()) {
       result = `Due tomorrow!`;
     } else {
       for (let i = 0; i < 100; i += 1) {
@@ -55,9 +53,9 @@ export default class TodoList {
       project,
       false
     );
-    if (newTodo.dueDate === this.todayDate && newTodo.project === "Inbox")
+    if (newTodo.dueDate === this.getTodaysDate() && newTodo.project === "Inbox")
       this.today.push(newTodo);
-    if (newTodo.dueDate !== this.todayDate && newTodo.project === "Inbox")
+    if (newTodo.dueDate !== this.getTodaysDate() && newTodo.project === "Inbox")
       this.upcoming.push(newTodo);
     if (newTodo.project !== "Inbox") {
       for (const property in this) {
@@ -70,7 +68,11 @@ export default class TodoList {
   }
 
   addProject(value) {
+    for (const array in this) {
+      if (array === value) return false;
+    }
     this[value] = [];
+    return true;
   }
 
   removeTodo(array, index) {
